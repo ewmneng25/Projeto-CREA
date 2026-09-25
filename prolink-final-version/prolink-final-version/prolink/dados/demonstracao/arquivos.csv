@@ -1,0 +1,17 @@
+﻿id;usuarioId;categoria;referenciaId;nome;detalhe;tamanho;criadoEm
+arq-cur-1;u-prof-demo;curriculo;;curriculo-daniel-carmo.pdf;Enviado em 04/09/2026 · lido pela análise;820 KB;2026-09-04 10:00:00
+arq-cer-1;u-prof-demo;certificado;;diploma-engenharia-civil-ufam.pdf;Universidade Federal do Amazonas · 2018;1,2 MB;2026-09-04 10:00:00
+arq-cer-2;u-prof-demo;certificado;;curso-revit-estrutural.pdf;Certificação BIM · 2024;640 KB;2026-09-04 10:01:00
+arq-cer-3;u-prof-demo;certificado;;nr-35-trabalho-em-altura.pdf;Válido até 03/2027;410 KB;2026-09-04 10:02:00
+arq-demo-01;u-emp-demo;foto-obra;obr-01;galpao-estrutura-montada.jpg;Foto da obra;2,4 MB;2026-09-05 10:01:00
+arq-demo-02;u-emp-demo;foto-obra;obr-01;galpao-cobertura-concluida.jpg;Foto da obra;2,1 MB;2026-09-05 10:02:00
+arq-demo-03;u-emp-demo;atestado;obr-01;atestado-capacidade-galpao.pdf;Atestado de capacidade técnica · emitido pelo cliente;380 KB;2026-09-05 10:03:00
+arq-demo-04;u-emp-demo;foto-obra;obr-02;subestacao-quadros.jpg;Foto da obra;1,8 MB;2026-09-05 10:04:00
+arq-demo-05;u-emp-demo;foto-obra;obr-03;escola-iranduba-fachada.jpg;Foto da obra;2,6 MB;2026-09-05 10:05:00
+arq-demo-06;u-emp-demo;atestado;obr-03;atestado-capacidade-escola.pdf;Atestado de capacidade técnica · emitido pelo cliente;420 KB;2026-09-05 10:06:00
+arq-demo-07;u-emp-demo;certificacao;;iso-9001-daniel-tec.pdf;ISO 9001 · válida até 08/2027;610 KB;2026-09-05 10:07:00
+arq-demo-08;u-emp-demo;apresentacao;;apresentacao-institucional-daniel-tec.pdf;Apresentação institucional;3,2 MB;2026-09-05 10:08:00
+arq-demo-09;u-emp-demo;estrutura;;relacao-equipamentos-frota.pdf;Estrutura disponível: equipamentos e frota;290 KB;2026-09-05 10:09:00
+arq-demo-10;u-prof-demo;projeto;proj-01;planta-estrutural-residencial-manaos.pdf;Planta e memorial;4,8 MB;2026-09-05 10:10:00
+arq-demo-11;u-prof-demo;projeto;proj-01;fundacao-concretagem.jpg;Foto da obra;2,2 MB;2026-09-05 10:11:00
+arq-demo-12;u-prof-demo;projeto;proj-02;diagrama-unifilar-industria-norte.pdf;Projeto elétrico;1,9 MB;2026-09-05 10:12:00

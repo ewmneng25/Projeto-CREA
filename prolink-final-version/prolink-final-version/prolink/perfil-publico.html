@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perfil público · ProLink</title>
+<link rel="stylesheet" href="assets/css/prolink.css">
+</head>
+<body>
+<a class="pular-para-conteudo" href="#conteudo">Ir para o conteúdo</a>
+
+<header class="topo-publico">
+  <a class="marca" href="index.html"><svg class="marca-svg" width="32" height="32" viewBox="0 0 44 44" fill="none" aria-hidden="true"><g stroke="url(#pl33-barra)" stroke-width="2.6" stroke-linecap="round"><path class="barra" d="M22 7.5 6.5 34.5"/><path class="barra" d="M22 7.5 37.5 34.5"/><path class="barra" d="M6.5 34.5h31"/><path class="barra" d="M22 7.5V22"/><path class="barra" d="M22 22 6.5 34.5"/><path class="barra" d="M22 22l15.5 12.5"/></g><g fill="url(#pl33-no)"><circle class="no" cx="22" cy="7.5" r="4.2"/><circle class="no" cx="6.5" cy="34.5" r="4.2"/><circle class="no" cx="37.5" cy="34.5" r="4.2"/></g><circle class="no no-centro" cx="22" cy="22" r="5.6" fill="#0b1220"/><circle class="no no-centro" cx="22" cy="22" r="5.6" fill="none" stroke="#7aa7ff" stroke-width="2.4"/><circle class="no no-centro" cx="22" cy="22" r="1.9" fill="#7aa7ff"/><defs><linearGradient id="pl33-barra" gradientUnits="userSpaceOnUse" x1="6" y1="8" x2="38" y2="35"><stop stop-color="#60a5fa"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient><linearGradient id="pl33-no" gradientUnits="userSpaceOnUse" x1="6" y1="8" x2="38" y2="35"><stop stop-color="#93c5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs></svg><span class="marca-nome">Pro<span>Link</span></span></a>
+  <nav aria-label="Navegação principal">
+    <a href="buscar.html">Buscar profissionais</a>
+    <a href="index.html#recursos">Como funciona</a>
+  </nav>
+  <div class="acoes" id="acoes-previa">
+    <a class="btn btn-secundario" href="login.html">Entrar</a>
+    <a class="btn" href="cadastro.html">Criar conta</a>
+  </div>
+</header>
+
+<main id="conteudo" class="pagina-previa" style="max-width:var(--max); margin:0 auto; padding:28px 32px 56px">
+  <div id="previa-perfil-publico"></div>
+</main>
+
+<footer class="rodape-publico">
+  <span>ProLink · Desafio Crea Pro-Link — II CENATEC 2026 ·
+        <a class="link" href="manual-do-usuario.pdf" target="_blank" rel="noopener">Manual do usuário</a></span>
+  <span>Ambiente de divulgação voluntária. Não substitui contratação, habilitação,
+        licitação, fiscalização ou verificação documental.</span>
+</footer>
+<script src="app/views/chave-gemini.js"></script>
+<script src="app/views/icones.js"></script>
+<script src="app/views/transicao.js"></script>
+<script src="dados/base-inicial.js"></script>
+<script src="dados/base-demonstracao.js"></script>
+<script src="app/core/arquivos-locais.js"></script>
+<script src="app/core/banco.js" data-scripts="models/repositorios.js,models/demandas.js,controllers/perfil-publico.js"></script>
+</body>
+</html>
