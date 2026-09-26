@@ -1,1 +1,0 @@
-Em razão do GitHub não aceitar mais de 100 arquivos em um único upload, foi necessário colocar o arquivo não zipado em uma pasta do Google Drive. Segue o link: [https://drive.google.com/drive/folders/17pwXTjzIygtUbKh9XQoVkqMtISz2Kkbs?usp=sharing].
