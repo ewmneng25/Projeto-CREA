@@ -1,7 +1,0 @@
-﻿id;usuarioId;tipo;numero;rnp;titulo;local;situacao;confirmadoEm;origem;criadoEm
-doc-01;u-prof-demo;ART;2026/123456;;Projeto estrutural residencial;Residencial Ponta Negra;Validada;10/07/2026;Crea-AM;2026-09-01 08:00:00
-doc-02;u-prof-demo;ART;2026/123455;;Laudo técnico estrutural;Centro de Distribuição Alfa;Validada;02/07/2026;Crea-AM;2026-09-02 08:00:00
-doc-03;u-prof-demo;ART;2026/123454;;Instalações hidráulicas;Edifício Solimões;Em consulta;;Crea-AM;2026-09-03 08:00:00
-doc-04;u-prof-demo;ART;2026/123451;;Projeto elétrico e SPDA;Indústria de Alimentos Norte;Validada;18/06/2026;Crea-AM;2026-09-04 08:00:00
-doc-05;u-prof-demo;CAT;2025/0881;;Execução de fundação profunda;Edifício Residencial Manaós;Validada;12/12/2025;Crea-AM;2026-09-05 08:00:00
-doc-06;u-prof-demo;CAT;2024/0640;;Projeto elétrico industrial;Indústria de Alimentos Norte;Validada;05/11/2024;Crea-AM;2026-09-06 08:00:00
