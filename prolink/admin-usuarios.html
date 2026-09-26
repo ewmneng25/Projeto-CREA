@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usuários · ProLink</title>
+<meta name="description" content="ProLink — plataforma que conecta profissionais técnicos a empresas, obras e oportunidades.">
+<link rel="stylesheet" href="assets/css/prolink.css">
+</head>
+<body>
+<a class="pular-para-conteudo" href="#conteudo">Ir para o conteúdo</a>
+<div class="app">
+
+  <aside class="sidebar" aria-label="Menu lateral">
+    <a class="marca" href="admin-inicio.html">
+      <svg class="marca-svg" width="32" height="32" viewBox="0 0 44 44" fill="none" aria-hidden="true"><g stroke="url(#pl27-barra)" stroke-width="2.6" stroke-linecap="round"><path class="barra" d="M22 7.5 6.5 34.5"/><path class="barra" d="M22 7.5 37.5 34.5"/><path class="barra" d="M6.5 34.5h31"/><path class="barra" d="M22 7.5V22"/><path class="barra" d="M22 22 6.5 34.5"/><path class="barra" d="M22 22l15.5 12.5"/></g><g fill="url(#pl27-no)"><circle class="no" cx="22" cy="7.5" r="4.2"/><circle class="no" cx="6.5" cy="34.5" r="4.2"/><circle class="no" cx="37.5" cy="34.5" r="4.2"/></g><circle class="no no-centro" cx="22" cy="22" r="5.6" fill="#0b1220"/><circle class="no no-centro" cx="22" cy="22" r="5.6" fill="none" stroke="#7aa7ff" stroke-width="2.4"/><circle class="no no-centro" cx="22" cy="22" r="1.9" fill="#7aa7ff"/><defs><linearGradient id="pl27-barra" gradientUnits="userSpaceOnUse" x1="6" y1="8" x2="38" y2="35"><stop stop-color="#60a5fa"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient><linearGradient id="pl27-no" gradientUnits="userSpaceOnUse" x1="6" y1="8" x2="38" y2="35"><stop stop-color="#93c5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs></svg>
+      <span class="marca-nome">Pro<span>Link</span></span>
+    </a>
+
+    <a class="atalho-miranda" href="miranda.html" data-transicao="Chamando a Miranda…">
+      <img class="rosto-miranda" src="assets/img/miranda-avatar.png" alt="" width="40" height="40">
+      <span class="atalho-miranda-texto">
+        <strong>Falar com a Miranda</strong>
+        <small>Assistente do ProLink</small>
+      </span>
+    </a>
+
+    <div>
+      <p class="nav-grupo-titulo">Administração</p>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="admin-inicio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Painel</span></a>
+        <a href="admin-usuarios.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.4"/><path d="M2.8 19.4a6.4 6.4 0 0 1 12.4 0"/><path d="M16.2 5.5a3.4 3.4 0 0 1 0 6.6"/><path d="M18 19.4a6.4 6.4 0 0 0-2-4.4"/></svg><span>Usuários</span></a>
+        <a href="admin-denuncias.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 5.2-2 6.5-2 6.5h16S18 14.2 18 9z"/><path d="M13.7 19.2a2 2 0 0 1-3.4 0"/></svg><span>Denúncias</span><span class="nav-contador">0</span></a>
+      </nav>
+    </div>
+
+    <div>
+      <p class="nav-grupo-titulo">Governança</p>
+      <nav class="nav" aria-label="Navegação do perfil">
+        <a href="admin-auditoria.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h7.5L18.5 8v12.5H6z"/><path d="M13.5 3.5V8h5"/><path d="M9 13h6.5M9 16.5h4.5"/></svg><span>Trilha de auditoria</span></a>
+      </nav>
+    </div>
+
+    <div class="sidebar-rodape">
+      
+    </div>
+  </aside>
+
+  <div class="conteudo">
+    <header class="topbar" aria-label="Barra superior">
+      <div class="busca-global">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <label class="sr-apenas" for="busca">Buscar na plataforma</label>
+        <input id="busca" type="search" placeholder="Buscar oportunidades, empresas ou profissionais">
+      </div>
+      <div class="topbar-acoes">
+        <div class="area-notificacoes">
+          <button class="botao-icone" type="button" id="abrir-notificacoes"
+                  aria-label="Notificações" aria-expanded="false" aria-haspopup="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 5.2-2 6.5-2 6.5h16S18 14.2 18 9z"/><path d="M13.7 19.2a2 2 0 0 1-3.4 0"/></svg><span class="ponto-alerta"></span>
+          </button>
+          <div class="painel-notificacoes" id="painel-notificacoes" hidden></div>
+        </div>
+        <a class="botao-icone" href="manual-do-usuario.pdf" target="_blank" rel="noopener"
+           aria-label="Manual do usuário (PDF)" title="Manual do usuário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h7.5L18.5 8v12.5H6z"/><path d="M13.5 3.5V8h5"/><path d="M9 13h6.5M9 16.5h4.5"/></svg></a>
+        <a class="botao-icone" href="admin-configuracoes.html" aria-label="Configurações" title="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 14.5a1.6 1.6 0 0 0 .32 1.77l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-1 1.47V21a2 2 0 0 1-4 0v-.1a1.6 1.6 0 0 0-1-1.47 1.6 1.6 0 0 0-1.77.32l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-1H3a2 2 0 0 1 0-4h.1a1.6 1.6 0 0 0 1.47-1 1.6 1.6 0 0 0-.32-1.77l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.6 1.6 0 0 0 1.77.32H9a1.6 1.6 0 0 0 1-1.47V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.6 1.6 0 0 0-.32 1.77V9a1.6 1.6 0 0 0 1.47 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.47 1z"/></svg></a>
+        <div class="usuario-topbar">
+          <span class="avatar avatar-sm" data-usuario-campo="iniciais">--</span>
+          <span>
+            <strong data-usuario-campo="nome">Perfil de teste</strong>
+            <small data-usuario-campo="registro">Registro pendente</small>
+          </span>
+        </div>
+        <button class="botao-icone botao-sair" type="button" id="sair-da-sessao"
+                title="Sair da sessão" aria-label="Sair da sessão" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 20.5H6a1.5 1.5 0 0 1-1.5-1.5V5A1.5 1.5 0 0 1 6 3.5h8.5"/><path d="M17 15.5 20.5 12 17 8.5"/><path d="M20 12H9.5"/></svg></button>
+      </div>
+    </header>
+
+    <main class="pagina" id="conteudo">
+      <div class="pagina-cabecalho">
+        <div>
+          <h1>Usuários</h1>
+          <p>3.212 contas ativas. Bloqueio é reversível e fica registrado na trilha de auditoria.</p>
+        </div>
+        <button class="btn btn-secundario" type="button">Exportar relatório</button>
+      </div>
+
+      <div class="cartao" style="margin-bottom:18px">
+        <div class="grade-form" style="grid-template-columns: minmax(0,2fr) repeat(3, minmax(0,1fr))">
+          <div class="campo">
+            <label for="busca-usuario">Buscar por nome, e-mail ou documento</label>
+            <input id="busca-usuario" type="search" placeholder="Ex.: Daniel">
+          </div>
+          <div class="campo">
+            <label for="filtro-perfil">Perfil</label>
+            <select id="filtro-perfil">
+              <option>Todos</option><option>Profissional</option>
+              <option>Empresa</option><option>Terceiro</option><option>Administrador</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="filtro-situacao">Situação</label>
+            <select id="filtro-situacao">
+              <option>Todas</option><option>Verificado</option>
+              <option>Não verificado</option><option>Bloqueado</option>
+            </select>
+          </div>
+          <div class="campo" style="align-self:end">
+            <button class="btn btn-bloco" type="button">Filtrar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cartao cartao-limpo">
+        <div class="tabela-rolagem">
+        <table class="tabela-admin">
+          <thead><tr><th>Usuário</th><th>Perfil</th><th>Situação</th><th>Registro</th><th>Cadastro</th><th>Ação</th></tr></thead>
+          <tbody><tr><td><span class="celula-pessoa">
+            <span class="avatar avatar-sm ">DC</span>
+            <span><strong>Daniel Silva do Carmo</strong><span class="dica">daniel.carmo@exemplo.com</span></span>
+          </span></td><td>Profissional</td><td><span class="etiqueta etiqueta-verde">Verificado</span></td><td>CREA-AM 031947/D</td><td>04/09/2026</td><td><button class="btn btn-secundario btn-sm" type="button" data-admin-bloquear>Bloquear</button></td></tr><tr><td><span class="celula-pessoa">
+            <span class="avatar avatar-sm avatar-empresa">DT</span>
+            <span><strong>Daniel Tec</strong><span class="dica">contato@danieltec.com.br</span></span>
+          </span></td><td>Empresa</td><td><span class="etiqueta etiqueta-verde">Verificado</span></td><td>CREA-AM 987654321</td><td>02/09/2026</td><td><button class="btn btn-secundario btn-sm" type="button" data-admin-bloquear>Bloquear</button></td></tr><tr><td><span class="celula-pessoa">
+            <span class="avatar avatar-sm avatar-roxo">AB</span>
+            <span><strong>Ana Beatriz Farias</strong><span class="dica">ana.farias@exemplo.com</span></span>
+          </span></td><td>Profissional</td><td><span class="etiqueta etiqueta-verde">Verificado</span></td><td>CREA-AM 028114/D</td><td>28/08/2026</td><td><button class="btn btn-secundario btn-sm" type="button" data-admin-bloquear>Bloquear</button></td></tr><tr><td><span class="celula-pessoa">
+            <span class="avatar avatar-sm avatar-ambar">RS</span>
+            <span><strong>Rafael Souza</strong><span class="dica">rafael.souza@exemplo.com</span></span>
+          </span></td><td>Profissional</td><td><span class="etiqueta etiqueta-ambar">Não verificado</span></td><td>Em regularização</td><td>26/08/2026</td><td><button class="btn btn-secundario btn-sm" type="button" data-admin-bloquear>Bloquear</button></td></tr><tr><td><span class="celula-pessoa">
+            <span class="avatar avatar-sm avatar-empresa">CE</span>
+            <span><strong>Condomínio Estrela</strong><span class="dica">sindico@estrela.exemplo.com</span></span>
+          </span></td><td>Terceiro</td><td><span class="etiqueta etiqueta-neutra">Sem registro</span></td><td>—</td><td>20/08/2026</td><td><button class="btn btn-secundario btn-sm" type="button" data-admin-bloquear>Bloquear</button></td></tr><tr><td><span class="celula-pessoa">
+            <span class="avatar avatar-sm avatar-empresa">TT</span>
+            <span><strong>Conta de teste</strong><span class="dica">teste@exemplo.com</span></span>
+          </span></td><td>Profissional</td><td><span class="etiqueta etiqueta-ambar">Bloqueado</span></td><td>—</td><td>12/08/2026</td><td><button class="btn btn-secundario btn-sm" type="button">Desbloquear</button></td></tr></tbody>
+        </table>
+      </div>
+      </div>
+
+      <p class="dica" style="margin-top:14px; max-width:80ch">
+        A exclusão é lógica: o registro recebe a situação de excluído e some das consultas
+        operacionais, mas continua disponível para auditoria e restauração.
+      </p>
+
+    </main>
+  </div>
+</div>
+
+<!-- Botão flutuante da Miranda: presente em todas as telas internas.
+     O guia (miranda-guia.js) usa este botão como âncora das dicas. -->
+<button class="miranda-flutuante" type="button" id="miranda-flutuante"
+        aria-label="Abrir dicas da Miranda">
+  <img src="assets/img/miranda-avatar.png" alt="" width="56" height="56">
+  <span class="miranda-flutuante-alerta" id="miranda-flutuante-alerta" hidden></span>
+</button>
+
+<script src="app/views/chave-gemini.js"></script>
+<script src="app/views/icones.js"></script>
+<script src="app/views/transicao.js"></script>
+<script src="dados/base-inicial.js"></script>
+<script src="dados/base-demonstracao.js"></script>
+<script src="app/core/arquivos-locais.js"></script>
+<script src="app/core/banco.js" data-scripts="models/repositorios.js,core/app.js,views/componentes.js,controllers/interface.js,controllers/sessao.js,controllers/cadastro.js,controllers/perfil.js,controllers/denuncias.js,controllers/notificacoes.js,models/demandas.js,controllers/layout.js,controllers/oportunidades.js,controllers/demandas.js,controllers/busca.js,controllers/portfolio.js,controllers/avaliacoes.js,controllers/admin.js,controllers/painel.js,controllers/conta.js,controllers/abas.js,controllers/miranda-guia.js"></script>
+</body>
+</html>

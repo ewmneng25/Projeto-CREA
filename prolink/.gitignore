@@ -1,0 +1,15 @@
+# A chave da assistente fica fora do versionamento. O item 8.3.1 (j) do
+# Anexo I manda guardar chave e token fora do código-fonte, e o checklist
+# do Anexo VI reprova entrega com credencial real dentro.
+#
+# A chave do Gemini é digitada na tela inicial (Ctrl + Espaço), mas o
+# arquivo continua ignorado por segurança, caso alguém o crie.
+# O token do Crea fica em chave_api_crea.txt, também fora do versionamento.
+chave_api_gemini.txt
+chave_api_crea.txt
+
+.ENV
+*.env
+node_modules/
+*.log
+.DS_Store

@@ -1,0 +1,61 @@
+﻿id;data;acao;autor;alvo;origem
+aud-200;23/09/2026 08:45;Publicação de demanda;contato@techsolut.exemplo.com;Usina solar fotovoltaica;199.***.***.85
+aud-199;23/09/2026 12:12;Consulta ao Crea;tatiane@exemplo.com;ART 2026/150980 · RNP —;196.***.***.240
+aud-198;23/09/2026 11:30;Manifestação de interesse;joão@exemplo.com;João Dias Ferreira → Projeto estrutural de edifício residencial;172.***.***.172
+aud-197;23/09/2026 10:02;Manifestação de interesse;aline@exemplo.com;Aline Pinheiro Teixeira → Recuperação de área degradada;189.***.***.126
+aud-196;22/09/2026 14:44;Alteração de privacidade;caio@exemplo.com;Visibilidade do acervo;170.***.***.56
+aud-195;22/09/2026 10:16;Decisão de denúncia;admin@crea-am.org.br;Protocolo 2026/0331;194.***.***.52
+aud-194;22/09/2026 15:45;Decisão de denúncia;admin@crea-am.org.br;Protocolo 2026/0315;190.***.***.57
+aud-193;22/09/2026 10:02;Publicação de demanda;contato@verde.exemplo.com;Recuperação de área degradada;181.***.***.36
+aud-192;21/09/2026 08:12;Manifestação de interesse;carolina@exemplo.com;Carolina Barbosa Santos → Usina solar fotovoltaica;191.***.***.25
+aud-191;21/09/2026 13:22;Bloqueio;admin@crea-am.org.br;Leonardo Santana Cardoso;194.***.***.130
+aud-190;21/09/2026 16:00;Alteração de privacidade;sabrina@exemplo.com;Visibilidade do acervo;174.***.***.163
+aud-189;21/09/2026 13:56;Autenticação;pedro@exemplo.com;Pedro Almeida Farias;172.***.***.221
+aud-188;20/09/2026 18:01;Manifestação de interesse;daniel@exemplo.com;Daniel Silva do Carmo → Estabilidade de talude;178.***.***.138
+aud-187;20/09/2026 10:07;Alteração de privacidade;daniel@exemplo.com;Visibilidade do acervo;176.***.***.250
+aud-186;20/09/2026 10:47;Consulta ao Crea;fábio@exemplo.com;ART 2026/131218 · RNP 2648329025;185.***.***.29
+aud-185;20/09/2026 16:17;Alteração de privacidade;letícia@exemplo.com;Visibilidade do acervo;173.***.***.123
+aud-184;19/09/2026 14:06;Manifestação de interesse;isabela@exemplo.com;Isabela Barbosa Oliveira → Reforço de cobertura metálica;198.***.***.109
+aud-183;19/09/2026 19:23;Manifestação de interesse;pedro@exemplo.com;Pedro Santana Freitas → Projeto elétrico industrial;172.***.***.110
+aud-182;19/09/2026 19:04;Manifestação de interesse;fábio@exemplo.com;Fábio Oliveira Barbosa → Fiscalização de obra de saneamento;175.***.***.201
+aud-181;19/09/2026 19:46;Manifestação de interesse;débora@exemplo.com;Débora Queiroz Souza → Plano de gerenciamento de resíduos;176.***.***.30
+aud-180;18/09/2026 10:54;Publicação de demanda;contato@solimões.exemplo.com;SPDA e aterramento;194.***.***.41
+aud-179;18/09/2026 13:48;Bloqueio;admin@crea-am.org.br;Ana Menezes Teixeira;184.***.***.59
+aud-178;18/09/2026 10:08;Bloqueio;admin@crea-am.org.br;Priscila Costa Silva;170.***.***.230
+aud-177;18/09/2026 10:35;Manifestação de interesse;carlos@exemplo.com;Carlos Vieira Farias → Recuperação de área degradada;186.***.***.41
+aud-176;17/09/2026 11:16;Manifestação de interesse;rafael@exemplo.com;Rafael Souza → Recuperação de área degradada;191.***.***.221
+aud-175;17/09/2026 09:40;Manifestação de interesse;leonardo@exemplo.com;Leonardo Carvalho Almeida → Usina solar fotovoltaica;174.***.***.45
+aud-174;17/09/2026 08:28;Bloqueio;admin@crea-am.org.br;Leonardo Almeida Cardoso;182.***.***.217
+aud-173;17/09/2026 10:00;Publicação de demanda;contato@amazônia.exemplo.com;Usina solar fotovoltaica;172.***.***.182
+aud-172;16/09/2026 10:14;Alteração de privacidade;igor@exemplo.com;Visibilidade do acervo;174.***.***.161
+aud-171;16/09/2026 15:41;Manifestação de interesse;letícia@exemplo.com;Letícia Carvalho Castro → Laudo de estrutura de concreto;187.***.***.221
+aud-170;16/09/2026 15:34;Decisão de denúncia;admin@crea-am.org.br;Protocolo 2026/0334;190.***.***.152
+aud-169;16/09/2026 18:50;Autenticação;leonardo@exemplo.com;Leonardo Santana Cardoso;187.***.***.14
+aud-168;15/09/2026 10:44;Bloqueio;admin@crea-am.org.br;Ana Beatriz Farias;184.***.***.189
+aud-167;15/09/2026 19:29;Bloqueio;admin@crea-am.org.br;Aline Pinheiro Teixeira;197.***.***.119
+aud-166;15/09/2026 08:48;Consulta ao Crea;otávio@exemplo.com;ART 2026/107834 · RNP 2638536141;174.***.***.102
+aud-165;15/09/2026 16:57;Alteração de privacidade;leonardo@exemplo.com;Visibilidade do acervo;200.***.***.160
+aud-164;14/09/2026 13:27;Autenticação;ana@exemplo.com;Ana Beatriz Farias;191.***.***.117
+aud-163;14/09/2026 13:52;Alteração de privacidade;ana@exemplo.com;Visibilidade do acervo;189.***.***.201
+aud-162;14/09/2026 11:59;Autenticação;joão@exemplo.com;João Dias Ferreira;199.***.***.69
+aud-161;14/09/2026 09:02;Alteração de privacidade;paula@exemplo.com;Visibilidade do acervo;181.***.***.64
+aud-160;13/09/2026 15:07;Alteração de privacidade;yasmin@exemplo.com;Visibilidade do acervo;176.***.***.112
+aud-159;13/09/2026 10:27;Publicação de demanda;contato@climatiza.exemplo.com;SPDA e aterramento;197.***.***.9
+aud-158;13/09/2026 14:01;Alteração de privacidade;camila@exemplo.com;Visibilidade do acervo;170.***.***.66
+aud-157;13/09/2026 11:08;Bloqueio;admin@crea-am.org.br;Camila Pinheiro Freitas;190.***.***.191
+aud-156;12/09/2026 16:05;Alteração de privacidade;joão@exemplo.com;Visibilidade do acervo;186.***.***.122
+aud-155;12/09/2026 12:09;Decisão de denúncia;admin@crea-am.org.br;Protocolo 2026/0339;192.***.***.219
+aud-154;12/09/2026 17:23;Manifestação de interesse;otávio@exemplo.com;Otávio Castro Silva → Projeto estrutural de edifício residencial;183.***.***.206
+aud-153;12/09/2026 13:45;Bloqueio;admin@crea-am.org.br;Juliana Tavares Vieira;174.***.***.221
+aud-152;11/09/2026 19:01;Bloqueio;admin@crea-am.org.br;Sérgio Martins Moraes;190.***.***.176
+aud-151;11/09/2026 13:33;Manifestação de interesse;sérgio@exemplo.com;Sérgio Farias Ramos → Inspeção de vasos de pressão;193.***.***.185
+aud-150;11/09/2026 13:08;Autenticação;pedro@exemplo.com;Pedro Santana Freitas;199.***.***.164
+aud-149;11/09/2026 10:26;Publicação de demanda;contato@porto.exemplo.com;Inspeção de vasos de pressão;186.***.***.67
+aud-148;10/09/2026 12:44;Publicação de demanda;contato@amazônia.exemplo.com;Usina solar fotovoltaica;192.***.***.3
+aud-147;10/09/2026 11:12;Publicação de demanda;contato@hospital.exemplo.com;Projeto de climatização;171.***.***.187
+aud-146;10/09/2026 16:13;Bloqueio;admin@crea-am.org.br;Letícia Carvalho Castro;181.***.***.113
+aud-145;10/09/2026 15:59;Bloqueio;admin@crea-am.org.br;João Dias Ferreira;193.***.***.121
+aud-144;09/09/2026 17:44;Manifestação de interesse;pedro@exemplo.com;Pedro Menezes Lima → SPDA e aterramento;177.***.***.31
+aud-143;09/09/2026 09:31;Consulta ao Crea;raquel@exemplo.com;ART 2026/146954 · RNP 2668142594;172.***.***.214
+aud-142;09/09/2026 18:16;Decisão de denúncia;admin@crea-am.org.br;Protocolo 2026/0324;189.***.***.165
+aud-141;09/09/2026 18:32;Publicação de demanda;contato@hospital.exemplo.com;Fiscalização de obra de saneamento;195.***.***.157
