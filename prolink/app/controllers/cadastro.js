@@ -89,9 +89,17 @@
 
     function mostrarRetorno(classe, titulo, corpo) {
       if (!retorno) { return; }
+      retorno.hidden = false;
       retorno.className = "retorno-crea " + classe;
       retorno.innerHTML = "<strong>" + escapar(titulo) + "</strong>" + (corpo || "");
-      retorno.hidden = false;
+      /* Erro no documento: o campo fica marcado como inválido e aponta
+         para o aviso, que o leitor de tela lê junto com o campo. */
+      if (campoDocumento) {
+        var comErro = /atencao|erro/.test(classe);
+        campoDocumento.setAttribute("aria-invalid", comErro ? "true" : "false");
+        if (comErro) { campoDocumento.setAttribute("aria-describedby", "retorno-crea"); }
+        else { campoDocumento.removeAttribute("aria-describedby"); }
+      }
     }
 
     /* 11 dígitos é CPF (pessoa), 14 é CNPJ (empresa). O dígito verificador
@@ -176,9 +184,13 @@
       desenharPassos();
       window.scrollTo({ top: 0, behavior: "smooth" });
 
-      var primeiro = formCadastro.querySelector(
-        "#" + fluxo[indice] + " input:not([type=hidden]):not([disabled])");
-      if (primeiro && indice > 0) { primeiro.focus(); }
+      /* O foco vai para o título da etapa: o leitor de tela anuncia a
+         etapa nova, e o próximo Tab leva ao primeiro campo. */
+      var tituloEtapa = formCadastro.querySelector("#" + fluxo[indice] + " h2");
+      if (tituloEtapa && indice > 0) {
+        tituloEtapa.setAttribute("tabindex", "-1");
+        tituloEtapa.focus();
+      }
     }
 
     /* ---------------------------------------------------------------

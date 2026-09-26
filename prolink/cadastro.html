@@ -2,6 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script>
+  (function () {
+    try {
+      if (window.top === window && window.localStorage.getItem("prolink_modo_voz") === "1") {
+        var p = window.location.pathname.split("/").pop() || "index.html";
+        window.location.replace("acessivel.html?p=" + encodeURIComponent(p + window.location.search + window.location.hash));
+      }
+    } catch (erro) { /* sem armazenamento: segue a tela comum */ }
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Criar conta · ProLink</title>
 <link rel="stylesheet" href="assets/css/prolink.css">
@@ -75,7 +85,7 @@
       <h2 id="titulo-documento">Qual é o seu documento?</h2>
       <div class="campo campo-largo">
             <label for="documento">CPF</label>
-            <input id="documento" type="text" placeholder="Somente números">
+            <input id="documento" aria-required="true" type="text" placeholder="Somente números">
             
           </div>
 
@@ -134,7 +144,7 @@
             <div class="grade-form">
               <div class="campo campo-largo">
             <label for="con-nome">Nome ou razão social</label>
-            <input id="con-nome" type="text" placeholder="Como você quer aparecer para os profissionais" autocomplete="organization">
+            <input id="con-nome" aria-required="true" type="text" placeholder="Como você quer aparecer para os profissionais" autocomplete="organization">
             
           </div>
               <div class="campo">
@@ -153,7 +163,7 @@
           </div>
               <div class="campo campo-largo">
             <label for="con-email">E-mail</label>
-            <input id="con-email" type="email" placeholder="seu@email.com" autocomplete="email">
+            <input id="con-email" aria-required="true" type="email" placeholder="seu@email.com" autocomplete="email">
             <span class="dica">E-mail de contato: aparece no seu perfil. Você entra com o documento e a senha.</span>
           </div>
             </div>
@@ -163,7 +173,7 @@
             <div class="grade-form">
               <div class="campo campo-largo">
             <label for="dec-nome">Nome completo</label>
-            <input id="dec-nome" type="text" placeholder="Como aparece no seu registro profissional" autocomplete="name">
+            <input id="dec-nome" aria-required="true" type="text" placeholder="Como aparece no seu registro profissional" autocomplete="name">
             
           </div>
               <div class="campo">
@@ -195,7 +205,7 @@
           </div>
               <div class="campo campo-largo">
             <label for="dec-email">E-mail</label>
-            <input id="dec-email" type="email" placeholder="seu@email.com" autocomplete="email">
+            <input id="dec-email" aria-required="true" type="email" placeholder="seu@email.com" autocomplete="email">
             <span class="dica">E-mail de contato: aparece no seu perfil conforme suas escolhas de privacidade.</span>
           </div>
             </div>
@@ -206,27 +216,27 @@
               <h4 class="titulo-grupo-form">Dados essenciais <span>obrigatórios</span></h4>
               <div class="campo campo-largo">
                 <label for="sr-nome">Nome completo</label>
-                <input id="sr-nome" type="text" placeholder="Seu nome" autocomplete="name">
+                <input id="sr-nome" aria-required="true" type="text" placeholder="Seu nome" autocomplete="name">
               </div>
               <div class="campo campo-largo">
                 <label for="sr-profissao">Profissão ou ocupação</label>
-                <input id="sr-profissao" type="text" placeholder="Ex.: estudante de engenharia, projetista">
+                <input id="sr-profissao" aria-required="true" type="text" placeholder="Ex.: estudante de engenharia, projetista">
               </div>
               <div class="campo">
                 <label for="sr-cidade">Cidade</label>
-                <input id="sr-cidade" type="text" placeholder="Manaus" autocomplete="address-level2">
+                <input id="sr-cidade" aria-required="true" type="text" placeholder="Manaus" autocomplete="address-level2">
               </div>
               <div class="campo">
                 <label for="sr-uf">Estado</label>
-                <select id="sr-uf"><option value="">Selecione</option><option>AM</option><option>AC</option><option>AP</option><option>PA</option><option>RO</option><option>RR</option><option>TO</option><option>Outro estado</option></select>
+                <select id="sr-uf" aria-required="true"><option value="">Selecione</option><option>AM</option><option>AC</option><option>AP</option><option>PA</option><option>RO</option><option>RR</option><option>TO</option><option>Outro estado</option></select>
               </div>
               <div class="campo">
                 <label for="sr-telefone">Telefone ou WhatsApp</label>
-                <input id="sr-telefone" type="tel" placeholder="(92) 90000-0000" autocomplete="tel">
+                <input id="sr-telefone" aria-required="true" type="tel" placeholder="(92) 90000-0000" autocomplete="tel">
               </div>
               <div class="campo">
                 <label for="sr-email">E-mail</label>
-                <input id="sr-email" type="email" placeholder="seu@email.com" autocomplete="email">
+                <input id="sr-email" aria-required="true" type="email" placeholder="seu@email.com" autocomplete="email">
                 <span class="dica">Este será o seu login.</span>
               </div>
               <h4 class="titulo-grupo-form">Perfil <span>opcional</span></h4>
@@ -255,23 +265,23 @@
               <h4 class="titulo-grupo-form">Dados essenciais <span>obrigatórios</span></h4>
               <div class="campo campo-largo">
                 <label for="ser-razao">Razão social</label>
-                <input id="ser-razao" type="text" placeholder="Nome registrado da empresa" autocomplete="organization">
+                <input id="ser-razao" aria-required="true" type="text" placeholder="Nome registrado da empresa" autocomplete="organization">
               </div>
               <div class="campo">
                 <label for="ser-cidade">Cidade</label>
-                <input id="ser-cidade" type="text" placeholder="Manaus" autocomplete="address-level2">
+                <input id="ser-cidade" aria-required="true" type="text" placeholder="Manaus" autocomplete="address-level2">
               </div>
               <div class="campo">
                 <label for="ser-uf">Estado</label>
-                <select id="ser-uf"><option value="">Selecione</option><option>AM</option><option>AC</option><option>AP</option><option>PA</option><option>RO</option><option>RR</option><option>TO</option><option>Outro estado</option></select>
+                <select id="ser-uf" aria-required="true"><option value="">Selecione</option><option>AM</option><option>AC</option><option>AP</option><option>PA</option><option>RO</option><option>RR</option><option>TO</option><option>Outro estado</option></select>
               </div>
               <div class="campo">
                 <label for="ser-telefone">Telefone ou WhatsApp</label>
-                <input id="ser-telefone" type="tel" placeholder="(92) 3000-0000" autocomplete="tel">
+                <input id="ser-telefone" aria-required="true" type="tel" placeholder="(92) 3000-0000" autocomplete="tel">
               </div>
               <div class="campo">
                 <label for="ser-email">E-mail</label>
-                <input id="ser-email" type="email" placeholder="contato@empresa.com.br" autocomplete="email">
+                <input id="ser-email" aria-required="true" type="email" placeholder="contato@empresa.com.br" autocomplete="email">
                 <span class="dica">Este será o login da empresa.</span>
               </div>
               <h4 class="titulo-grupo-form">Perfil <span>opcional</span></h4>
@@ -336,7 +346,7 @@
           </div>
               <div class="campo campo-largo">
             <label for="emp-email">E-mail</label>
-            <input id="emp-email" type="email" placeholder="contato@empresa.com.br" autocomplete="email">
+            <input id="emp-email" aria-required="true" type="email" placeholder="contato@empresa.com.br" autocomplete="email">
             <span class="dica">Este será o login da empresa.</span>
           </div>
             </div>
@@ -357,18 +367,18 @@
             <div class="campo-largo" id="bloco-email-cad" hidden>
               <div class="campo campo-largo">
             <label for="email-cad">E-mail de contato</label>
-            <input id="email-cad" type="email" placeholder="seu@email.com" autocomplete="email">
+            <input id="email-cad" aria-required="true" type="email" placeholder="seu@email.com" autocomplete="email">
             <span class="dica">Aparece no seu perfil, conforme suas escolhas de privacidade. Não é usado para entrar.</span>
           </div>
             </div>
             <div class="campo">
             <label for="senha-cad">Senha</label>
-            <input id="senha-cad" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password">
+            <input id="senha-cad" aria-required="true" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password">
             <span class="dica">Ao menos 8 caracteres, com letras e números.</span>
           </div>
             <div class="campo">
             <label for="senha-conf">Confirmar senha</label>
-            <input id="senha-conf" type="password" placeholder="Repita a senha" autocomplete="new-password">
+            <input id="senha-conf" aria-required="true" type="password" placeholder="Repita a senha" autocomplete="new-password">
             
           </div>
           </div>
@@ -376,7 +386,7 @@
           <div class="grupo-campo">
             <h4>Consentimentos</h4>
             <p class="dica" style="margin-bottom:12px">Você pode rever qualquer um deles depois, no seu perfil.</p>
-            <label class="aceite"><input type="checkbox" id="aceite-termos"><span>Li e aceito os termos de uso e a política de privacidade</span></label>
+            <label class="aceite"><input type="checkbox" id="aceite-termos" aria-required="true"><span>Li e aceito os termos de uso e a política de privacidade</span></label>
             <label class="aceite"><input type="checkbox" id="aceite-visibilidade"><span>Quero que meu perfil apareça nas buscas públicas<span class="dica dica-aceite">Você controla o que fica visível a cada momento, campo por campo.</span></span></label>
             <label class="aceite"><input type="checkbox" id="aceite-avisos"><span>Quero receber avisos de demandas abertas na minha região</span></label>
           </div>
@@ -574,12 +584,15 @@
         licitação, seleção, fiscalização ou verificação documental.</span>
 </footer>
 
-<script src="app/views/chave-gemini.js"></script>
-<script src="app/views/icones.js"></script>
-<script src="app/views/transicao.js"></script>
-<script src="dados/base-inicial.js"></script>
-<script src="dados/base-demonstracao.js"></script>
-<script src="app/core/arquivos-locais.js"></script>
-<script src="app/core/banco.js" data-scripts="models/repositorios.js,models/crea-api.js,core/app.js,views/componentes.js,controllers/interface.js,controllers/sessao.js,controllers/cadastro.js,controllers/perfil.js,controllers/denuncias.js,controllers/notificacoes.js,controllers/miranda-guia.js"></script>
+<script src="app/views/chave-gemini.js?v=d7fb6a9830"></script>
+<script src="app/views/acessibilidade.js?v=d7fb6a9830"></script>
+<script src="app/views/ver-senha.js?v=d7fb6a9830"></script>
+<script src="app/views/voz-agente.js?v=d7fb6a9830"></script>
+<script src="app/views/boas-vindas.js?v=d7fb6a9830"></script>
+<script src="app/views/icones.js?v=d7fb6a9830"></script>
+<script src="app/views/transicao.js?v=d7fb6a9830"></script>
+<script src="dados/base-inicial.js?v=d7fb6a9830"></script>
+<script src="app/core/arquivos-locais.js?v=d7fb6a9830"></script>
+<script src="app/core/banco.js?v=d7fb6a9830" data-scripts="models/repositorios.js,models/crea-api.js,core/app.js,views/componentes.js,controllers/interface.js,controllers/sessao.js,controllers/cadastro.js,controllers/perfil.js,controllers/denuncias.js,controllers/notificacoes.js,controllers/miranda-guia.js"></script>
 </body>
 </html>

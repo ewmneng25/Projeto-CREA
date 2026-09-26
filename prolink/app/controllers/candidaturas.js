@@ -68,7 +68,7 @@
 
   var demandaDaTela = alvoOportunidade ? API.porId(parametro("d")) : null;
   if (alvoOportunidade && !demandaDaTela) {
-    alvoOportunidade.innerHTML = '<div class="cartao"><h2 style="margin-bottom:8px">Demanda não encontrada</h2>' +
+    alvoOportunidade.innerHTML = '<div class="cartao"><h1 style="margin-bottom:8px; font-size:20px">Demanda não encontrada</h1>' +
       '<p class="dica" style="margin-bottom:16px">Ela pode ter sido encerrada ou o endereço está incompleto.</p>' +
       '<a class="btn btn-sm" href="oportunidades.html">Ver oportunidades abertas</a></div>';
   }
@@ -417,7 +417,7 @@
     var base = API.profissionalPorId(candidatura ? candidatura.profissionalId : parametro("p")) ||
                (API.PROFISSIONAL.id ? API.PROFISSIONAL : null);
     if (!base) {
-      alvoPerfil.innerHTML = '<div class="cartao"><h2 style="margin-bottom:8px">Perfil não encontrado</h2>' +
+      alvoPerfil.innerHTML = '<div class="cartao"><h1 style="margin-bottom:8px; font-size:20px">Perfil não encontrado</h1>' +
         '<p class="dica" style="margin-bottom:16px">O profissional pode ter saído da plataforma ou o endereço está incompleto.</p>' +
         '<a class="btn btn-sm" href="javascript:history.back()">Voltar</a></div>';
       return;

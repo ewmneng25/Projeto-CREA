@@ -1,1 +1,14 @@
 ﻿id;usuarioId;contato;demanda;naoLidas;quando;atualizadaEm
+pro-c-ts;u-daniel;emp-ts;2026-124;2;10:30;2026-09-16 10:59:00
+pro-c-ve;u-daniel;emp-ve;2026-127;1;ontem;2026-09-16 10:58:00
+pro-c-ca;u-daniel;emp-ca;2026-129;0;25/07;2026-09-16 10:57:00
+pro-c-ab;u-daniel;prof-002;;0;24/07;2026-09-16 10:56:00
+pro-c-lm;u-daniel;prof-003;;0;20/07;2026-09-16 10:55:00
+pro-c-np;u-daniel;emp-np;2026-130;0;18/07;2026-09-16 10:54:00
+emp-c-dc;u-dw-engenharia;prof-001;2026-120;0;09:40;2026-09-26 09:40:00
+emp-c-ab;u-dw-engenharia;prof-002;2026-118;2;ontem;2026-09-16 10:58:00
+emp-c-lm;u-dw-engenharia;prof-003;2026-119;0;20/07;2026-09-16 10:57:00
+emp-c-rs;u-dw-engenharia;prof-004;2026-120;0;18/07;2026-09-16 10:56:00
+pro-c-dw;u-daniel;u-dw-engenharia;2026-120;1;09:40;2026-09-26 09:40:00
+pro-c-dw-ed;u-eduardo;u-dw-engenharia;2026-118;1;08:55;2026-09-26 08:55:00
+emp-c-ed;u-dw-engenharia;prof-eduardo;2026-118;0;08:55;2026-09-26 08:55:00

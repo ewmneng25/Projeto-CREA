@@ -40,7 +40,7 @@
    USO PELAS TELAS
    ------------------------------------------------------------
      ProLinkBanco.listar("demandas", { situacao: "Aberta" })
-     ProLinkBanco.buscar("usuarios", "u-prof-demo")
+     ProLinkBanco.buscar("usuarios", "u-daniel")
      ProLinkBanco.inserir("projetos", { nome: "...", usuarioId: "..." })
      ProLinkBanco.atualizar("usuarios", id, { sobre: "..." })
      ProLinkBanco.excluir("projetos", id)
@@ -412,15 +412,14 @@
     .split(",").map(function (s) { return s.trim(); }).filter(Boolean);
   /* data-scripts usa caminhos a partir de app/ (ex.: "controllers/sessao.js"). */
   var pastaDosScripts = scriptAtual ? scriptAtual.getAttribute("src").replace(/core\/banco\.js.*$/, "") : "app/";
+  /* A mesma versão do banco.js (?v=…) vai para os scripts que ele carrega. */
+  var versaoDosScripts = scriptAtual ? (scriptAtual.getAttribute("src").split("?")[1] || "") : "";
 
   /* ------------------------------------------------------------------
      DUAS BASES
-     - Base real: começa vazia (dados/*.csv só com o cabeçalho). É onde
-       ficam as contas criadas no cadastro.
-     - Base de demonstração: dados fictícios (dados/demonstracao/*.csv),
-       usada só no modo de demonstração.
-     Cada uma fica guardada separada no navegador; uma nunca vê a outra.
-     O modo atual fica em localStorage (prolink_modo).
+     O sistema tem uma base só (dados/*.csv): a população de exemplo, as
+     contas da apresentação e as contas criadas no cadastro. O modo de
+     demonstração, que usava uma base fictícia separada, foi retirado.
      ------------------------------------------------------------------ */
   var CHAVE_MODO = "prolink_modo";
   var MODO_DEMO = "demonstracao";
@@ -428,10 +427,16 @@
      demonstração. */
   var PAGINAS_DA_BASE_REAL = ["index.html", "login.html", "cadastro.html", "recuperar.html"];
 
-  function lerModo() {
-    try { return window.localStorage.getItem(CHAVE_MODO) === MODO_DEMO ? MODO_DEMO : "real"; }
-    catch (erro) { return "real"; }
-  }
+  /* O modo de demonstração saiu do sistema: a base é sempre a real. O que
+     sobrou dele no navegador (marca do modo e a base fictícia) é apagado. */
+  function lerModo() { return "real"; }
+  try {
+    window.localStorage.removeItem(CHAVE_MODO);
+    Object.keys(window.localStorage).forEach(function (chave) {
+      if (chave.indexOf("prolink_demo_csv_") === 0) { window.localStorage.removeItem(chave); }
+    });
+    if (window.indexedDB) { window.indexedDB.deleteDatabase("prolink-demo-csv"); }
+  } catch (erro) { /* ignora */ }
   function gravarModo(modo) {
     try {
       if (modo === MODO_DEMO) { window.localStorage.setItem(CHAVE_MODO, MODO_DEMO); }
@@ -1015,7 +1020,7 @@
         return;
       }
       var s = document.createElement("script");
-      s.src = pastaDosScripts + fila.shift();
+      s.src = pastaDosScripts + fila.shift() + (versaoDosScripts ? "?" + versaoDosScripts : "");
       s.onload = proximo;
       s.onerror = proximo;
       document.body.appendChild(s);
@@ -1025,15 +1030,47 @@
   /* Quando a base inicial do projeto muda (CSV editados + build.py), o que
      estava guardado no navegador foi criado a partir da base antiga: o
      sistema troca pela nova, para o projeto e o navegador não divergirem. */
+  /* Base real: quando a base inicial do projeto muda, o que foi criado no
+     navegador (contas do cadastro, demandas, candidaturas, mensagens) é
+     mantido, e os registros novos do projeto entram junto. Nada se perde. */
+  function mesclarComGuardado(tabela) {
+    var inicial = BASE_INICIAL[tabela] || escreverCsv(tabela, []);
+    return lerCsvGuardado(tabela).then(function (texto) {
+      if (typeof texto !== "string" || !texto) { return guardarCsv(tabela, inicial); }
+      var guardadas = lerCsv(texto);
+      var existentes = {};
+      guardadas.forEach(function (r) { if (r.id) { existentes[r.id] = true; } });
+      var novas = lerCsv(inicial).filter(function (r) { return !r.id || !existentes[r.id]; });
+      if (!novas.length) { return; }
+      return guardarCsv(tabela, escreverCsv(tabela, guardadas.concat(novas)));
+    });
+  }
+
+  /* Geração da base: mudou, a base guardada é trocada inteira (contas e
+     dados antigos saem). Dentro da mesma geração, só mescla. */
+  var GERACAO_DA_BASE = "apresentacao-2026-09";
+
   function conferirVersao() {
     var versao = versaoDo(modoAtual);
-    return lerCsvGuardado("__versao_base").then(function (guardada) {
-      if (guardada === versao) { return; }
+    return Promise.all([lerCsvGuardado("__versao_base"), lerCsvGuardado("__geracao_base")]).then(function (lidas) {
+      var guardada = lidas[0];
+      var mesmaGeracao = lidas[1] === GERACAO_DA_BASE;
+      if (guardada === versao && mesmaGeracao) { return; }
+      if (modoAtual !== MODO_DEMO && guardada && mesmaGeracao) {
+        return Promise.all(TABELAS.map(mesclarComGuardado)).then(function () {
+          return guardarCsv("__versao_base", versao);
+        });
+      }
       return Promise.all(TABELAS.map(function (tabela) {
         return guardarCsv(tabela, BASE_INICIAL[tabela] || escreverCsv(tabela, []));
       })).then(function () {
-        try { window.localStorage.removeItem(CHAVE_SESSAO); } catch (erro) { /* ignora */ }
-        return guardarCsv("__versao_base", versao);
+        try {
+          window.localStorage.removeItem(CHAVE_SESSAO);
+          window.sessionStorage.removeItem(CHAVE_SESSAO);
+        } catch (erro) { /* ignora */ }
+        return guardarCsv("__geracao_base", GERACAO_DA_BASE).then(function () {
+          return guardarCsv("__versao_base", versao);
+        });
       });
     });
   }

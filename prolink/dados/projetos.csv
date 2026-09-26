@@ -1,1 +1,10 @@
 ﻿id;usuarioId;nome;descricao;area;situacao;periodo;capa;criadoEm
+proj-01;u-daniel;Edifício Residencial Manaós;Projeto estrutural completo, 18 pavimentos, fundação profunda.;Estrutural;Concluído;05/2023;;2026-09-01 09:00:00
+proj-02;u-daniel;Indústria de Alimentos Norte;Projeto elétrico e SPDA para planta industrial de 6.000 m².;Elétrica;Concluído;12/2022;capa-ambar;2026-09-02 09:00:00
+proj-03;u-daniel;Centro Comercial Ponta Negra;Instalações hidráulicas e combate a incêndio.;Hidráulica;Concluído;08/2022;capa-cinza;2026-09-03 09:00:00
+proj-04;u-daniel;Ponte sobre o igarapé do Quarenta;Reforço estrutural e laudo de capacidade de carga.;Estrutural;Em andamento;Desde 03/2026;capa-verde;2026-09-04 09:00:00
+proj-05;u-daniel;Hospital Regional de Parintins;Compatibilização de projetos em BIM, 9 pavimentos.;BIM;Em andamento;Desde 06/2026;capa-roxa;2026-09-05 09:00:00
+proj-06;u-daniel;Galpão logístico Distrito Industrial;Estrutura metálica e memorial de cálculo.;Estrutural;Concluído;02/2021;capa-cinza;2026-09-06 09:00:00
+proj-ed-1;u-eduardo;Galpão logístico Tarumã;Projeto elétrico, SPDA e malha de aterramento para galpão de 5.000 m².;Elétrica;Concluído;03/2026;capa-ambar;2026-09-06 15:00:00
+proj-ed-2;u-eduardo;Usina solar Solimões;Usina fotovoltaica de 150 kWp em cobertura, com conexão à rede.;Elétrica;Concluído;11/2025;;2026-09-06 15:00:00
+proj-ed-3;u-eduardo;Subestação Indústria Rio Negro;Subestação abrigada de 500 kVA e quadro geral de baixa tensão.;Elétrica;Concluído;06/2025;capa-cinza;2026-09-06 15:00:00

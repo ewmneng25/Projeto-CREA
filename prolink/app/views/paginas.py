@@ -1001,7 +1001,7 @@ def pagina_mensagens(lado="profissional"):
             <button class="btn btn-secundario btn-sm" type="button">Ver demanda</button>
           </div>
 
-          <div class="mensagens-corpo">
+          <div class="mensagens-corpo" role="log" aria-live="polite" aria-label="Mensagens da conversa" tabindex="0">
             <span class="divisor-data">Hoje</span>
 
             <div class="balao balao-recebido">
@@ -1235,6 +1235,13 @@ def pagina_miranda():
               <h3 style="margin-top:18px">Seus dados</h3>
               <p>A conversa não leva CPF, RNP, e-mail nem acervo. Vai apenas a sua pergunta e
                  o manual da plataforma.</p>
+
+              <h3 style="margin-top:18px">No modo de acessibilidade (voz)</h3>
+              <p>Quem ativa o modo conversa com a Miranda por voz, pela Gemini Live API. Ali ela
+                 recebe o áudio da sua fala e, para agir por você, o texto da tela aberta (que pode
+                 conter o seu nome, e-mail e dados da conta). Ela só age quando você pede e
+                 <strong>pergunta antes</strong> de publicar, enviar, salvar ou excluir qualquer coisa.
+                 Senhas ditadas não são repetidas em voz alta. Desativar o modo encerra a conversa.</p>
             </div>
 
             <div>
@@ -1630,7 +1637,7 @@ def pagina_login():
 <a class="pular-para-conteudo" href="#conteudo">Ir para o conteúdo</a>
 
 <div class="tela-login">
-  <section class="login-vitrine">
+  <section class="login-vitrine" aria-label="Sobre o ProLink">
     <a class="marca" href="index.html" style="color:#fff">__LOGO__<span class="marca-nome" style="color:#fff">Pro<span style="color:#fff">Link</span></span></a>
 
     <h2>Seu registro profissional, finalmente trabalhando a seu favor.</h2>
@@ -1675,16 +1682,6 @@ def pagina_login():
       </div>
       <button class="btn btn-lg btn-bloco" type="button" id="entrar-sessao">Entrar</button>
 
-      <div class="separador">quer só conhecer o sistema?</div>
-
-      <button class="btn btn-secundario btn-bloco" type="button" id="entrar-demonstracao">
-        Usar modo de demonstração
-      </button>
-      <p class="aviso-demonstracao">
-        __ESCUDO__
-        <span>Veja o ProLink com dados fictícios, sem criar conta: como profissional (PF),
-        empresa (PJ) ou administrativo.</span>
-      </p>
 
       <div class="separador">ou entre com</div>
 
@@ -3197,7 +3194,7 @@ def pagina_admin_denuncias():
     corpo = """      <div class="pagina-cabecalho">
         <div>
           <h1>Denúncias</h1>
-          <p>3 na fila · 11 resolvidas em setembro · prazo médio de resposta de 1,4 dia.</p>
+          <p id="resumo-denuncias">Carregando a fila…</p>
         </div>
       </div>
 
@@ -3208,7 +3205,7 @@ def pagina_admin_denuncias():
       </p>
 
       <div class="abas" role="group" aria-label="Filtrar lista">
-        <button class="aba-filtro" type="button" aria-pressed="true">Na fila <span class="nav-contador">3</span></button>
+        <button class="aba-filtro" type="button" aria-pressed="true">Na fila <span class="nav-contador"></span></button>
         <button class="aba-filtro" type="button" aria-pressed="false">Em análise</button>
         <button class="aba-filtro" type="button" aria-pressed="false">Resolvidas</button>
         <button class="aba-filtro" type="button" aria-pressed="false">Arquivadas</button>
@@ -3903,6 +3900,26 @@ MVC = {
 }
 
 
+# Campos obrigatórios: o leitor de tela anuncia "obrigatório" ao chegar neles.
+OBRIGATORIOS = [
+    "identificacao", "senha", "documento", "senha-cad", "senha-conf", "email-cad", "aceite-termos",
+    "sr-nome", "sr-profissao", "sr-cidade", "sr-uf", "sr-telefone", "sr-email",
+    "ser-razao", "ser-cidade", "ser-uf", "ser-telefone", "ser-email",
+    "dec-nome", "dec-email", "con-nome", "con-email", "emp-email",
+    "titulo-demanda", "descricao", "cidade-obra",
+    "documento-recuperar", "email-recuperar", "nova-senha", "nova-senha-conf",
+]
+
+
+def marcar_obrigatorios(html):
+    for ident in OBRIGATORIOS:
+        for tag in ("input", "select", "textarea"):
+            html = html.replace('<%s id="%s"' % (tag, ident), '<%s id="%s" aria-required="true"' % (tag, ident))
+    html = html.replace('<input type="checkbox" id="aceite-termos"',
+                        '<input type="checkbox" id="aceite-termos" aria-required="true"')
+    return html
+
+
 def carregar_pela_base(html):
     """A base CSV é lida antes de tudo: app/core/banco.js abre os CSV e só então
     carrega models, views e controllers da página, na ordem certa."""
@@ -3918,13 +3935,75 @@ def carregar_pela_base(html):
                 scripts.append(destino)
     html = re.sub(r'<script src="assets/js/[\w-]+\.js"></script>\n?', "", html)
     carga = ('<script src="app/views/chave-gemini.js"></script>\n'
+             '<script src="app/views/acessibilidade.js"></script>\n<script src="app/views/ver-senha.js"></script>\n<script src="app/views/voz-agente.js"></script>\n'
+             '<script src="app/views/boas-vindas.js"></script>\n'
              '<script src="app/views/icones.js"></script>\n'
              '<script src="app/views/transicao.js"></script>\n'
              '<script src="dados/base-inicial.js"></script>\n'
-             '<script src="dados/base-demonstracao.js"></script>\n'
              '<script src="app/core/arquivos-locais.js"></script>\n'
              '<script src="app/core/banco.js" data-scripts="%s"></script>\n' % ",".join(scripts))
+    carga = re.sub(r'src="((?:app|dados)/[^"?]+\.js)"',
+                   lambda m: 'src="%s?v=%s"' % (m.group(1), versao_dos_arquivos()), carga)
+    html = html.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n' + REDIRECIONA_VOZ, 1)
     return html.replace("</body>", carga + "</body>")
+
+
+_VERSAO_DOS_ARQUIVOS = []
+
+
+def versao_dos_arquivos():
+    """Resumo de todos os scripts e da base: muda quando qualquer um muda."""
+    if not _VERSAO_DOS_ARQUIVOS:
+        import hashlib
+        resumo = hashlib.sha256()
+        for pasta in ("app", "dados"):
+            for raiz, _, arquivos in sorted(os.walk(os.path.join(BASE, pasta))):
+                for nome in sorted(arquivos):
+                    if nome.endswith(".js"):
+                        with open(os.path.join(raiz, nome), "rb") as f:
+                            resumo.update(f.read())
+        _VERSAO_DOS_ARQUIVOS.append(resumo.hexdigest()[:10])
+    return _VERSAO_DOS_ARQUIVOS[0]
+
+
+# Com o modo de acessibilidade ligado, qualquer tela aberta direto no
+# navegador vai para dentro da moldura de voz (acessivel.html), que mantém
+# a conversa de áudio viva entre uma tela e outra.
+REDIRECIONA_VOZ = '''<script>
+  (function () {
+    try {
+      if (window.top === window && window.localStorage.getItem("prolink_modo_voz") === "1") {
+        var p = window.location.pathname.split("/").pop() || "index.html";
+        window.location.replace("acessivel.html?p=" + encodeURIComponent(p + window.location.search + window.location.hash));
+      }
+    } catch (erro) { /* sem armazenamento: segue a tela comum */ }
+  })();
+</script>
+'''
+
+
+def pagina_acessivel():
+    """Moldura de voz: a tela do ProLink num quadro e a Miranda por voz fora dele."""
+    chave_pela_interface = os.path.exists(os.path.join(BASE, "app", "views", "chave-gemini.js"))
+    return '''<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProLink · modo de acessibilidade</title>
+<meta name="description" content="ProLink com a assistente de voz Miranda.">
+<link rel="stylesheet" href="assets/css/prolink.css">
+</head>
+<body class="moldura-voz">
+<noscript><p>O modo de acessibilidade precisa de JavaScript.</p></noscript>
+''' + ('<script src="app/views/chave-gemini.js"></script>\n' if chave_pela_interface else '') + '''<script src="app/views/acessibilidade.js"></script>
+<script src="app/views/ver-senha.js"></script>
+<script src="app/views/voz-agente.js"></script>
+<script src="app/core/arquivos-locais.js"></script>
+<script src="app/views/voz-moldura.js"></script>
+</body>
+</html>
+'''
 
 
 def empacotar_dados():
@@ -3954,15 +4033,9 @@ def empacotar_dados():
     # Base real: dados/*.csv (só cabeçalhos no projeto entregue).
     base = ler_csvs(pasta)
     with open(os.path.join(pasta, "base-inicial.js"), "w", encoding="utf-8") as f:
-        f.write("/* Gerado pelo build.py a partir de dados/*.csv (base real, começa vazia). Não edite. */\n")
+        f.write("/* Gerado pelo build.py a partir de dados/*.csv (população de exemplo, contas da apresentação e o que as contas criarem). Não edite. */\n")
         f.write("window.PROLINK_BASE_INICIAL = %s;\n" % json.dumps(base, ensure_ascii=False, indent=1))
         f.write("window.PROLINK_VERSAO_BASE = %s;\n" % json.dumps(versao_de(base)))
-    # Base de demonstração: dados/demonstracao/*.csv (dados fictícios).
-    demo = ler_csvs(os.path.join(pasta, "demonstracao"))
-    with open(os.path.join(pasta, "base-demonstracao.js"), "w", encoding="utf-8") as f:
-        f.write("/* Gerado pelo build.py a partir de dados/demonstracao/*.csv (só modo de demonstração). Não edite. */\n")
-        f.write("window.PROLINK_BASE_DEMONSTRACAO = %s;\n" % json.dumps(demo, ensure_ascii=False))
-        f.write("window.PROLINK_VERSAO_DEMONSTRACAO = %s;\n" % json.dumps(versao_de(demo)))
     textos = {}
     # A chave do Gemini NÃO é empacotada: ela é digitada na tela inicial
     # (Ctrl + Espaço) e vale só enquanto o site estiver aberto.
@@ -3978,7 +4051,7 @@ def empacotar_dados():
     with open(os.path.join(BASE, "app", "views", "icones.js"), "w", encoding="utf-8") as f:
         f.write("/* Gerado pelo build.py: os ícones SVG das telas, para os controllers. */\n")
         f.write("window.PROLINK_ICONES = %s;\n" % json.dumps({k: ico(k) for k in ICONS}, ensure_ascii=False))
-    print("empacotados: %d CSV reais, %d de demonstração e %d arquivos de texto" % (len(base), len(demo), len(textos)))
+    print("empacotados: %d CSV e %d arquivos de texto" % (len(base), len(textos)))
 
 
 if __name__ == "__main__":
@@ -3986,5 +4059,8 @@ if __name__ == "__main__":
     for nome, fn in PAGINAS.items():
         caminho = os.path.join(BASE, nome)
         with open(caminho, "w", encoding="utf-8") as f:
-            f.write(carregar_pela_base(fn()))
+            f.write(marcar_obrigatorios(carregar_pela_base(fn())))
         print("gerado:", nome)
+    with open(os.path.join(BASE, "acessivel.html"), "w", encoding="utf-8") as f:
+        f.write(pagina_acessivel())
+    print("gerado: acessivel.html")

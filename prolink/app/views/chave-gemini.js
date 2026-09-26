@@ -86,6 +86,11 @@
       }
       fechar();
       avisar("Chave ativada. A Miranda já pode conversar.");
+      /* A moldura de voz (modo de acessibilidade) conecta assim que a chave chega. */
+      document.dispatchEvent(new CustomEvent("prolink:chave-gemini"));
+      if (window.parent && window.parent !== window) {
+        try { window.parent.postMessage({ marca: "prolink-voz", tipo: "chave-gemini" }, "*"); } catch (erro) { /* ignora */ }
+      }
     }
 
     fundo.querySelector('[data-chave="salvar"]').addEventListener("click", salvar);
@@ -115,6 +120,8 @@
       abrir();
     }
   }, true);
+
+  window.ProLinkChaveGemini = { abrir: function () { if (!aberta) { abrir(); } }, ler: lerChave };
 
   /* Alternativa ao atalho: abrir a página com #chave no endereço. */
   function abrirPeloEndereco() {

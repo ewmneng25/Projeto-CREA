@@ -1,1 +1,13 @@
 ﻿id;usuarioId;tipo;numero;rnp;titulo;local;situacao;confirmadoEm;origem;criadoEm
+doc-01;u-daniel;ART;2026/123456;;Projeto estrutural residencial;Residencial Ponta Negra;Validada;10/07/2026;Crea-AM;2026-09-01 08:00:00
+doc-02;u-daniel;ART;2026/123455;;Laudo técnico estrutural;Centro de Distribuição Alfa;Validada;02/07/2026;Crea-AM;2026-09-02 08:00:00
+doc-03;u-daniel;ART;2026/123454;;Instalações hidráulicas;Edifício Solimões;Em consulta;;Crea-AM;2026-09-03 08:00:00
+doc-04;u-daniel;ART;2026/123451;;Projeto elétrico e SPDA;Indústria de Alimentos Norte;Validada;18/06/2026;Crea-AM;2026-09-04 08:00:00
+doc-05;u-daniel;CAT;2025/0881;;Execução de fundação profunda;Edifício Residencial Manaós;Validada;12/12/2025;Crea-AM;2026-09-05 08:00:00
+doc-06;u-daniel;CAT;2024/0640;;Projeto elétrico industrial;Indústria de Alimentos Norte;Validada;05/11/2024;Crea-AM;2026-09-06 08:00:00
+doc-ed-1;u-eduardo;ART;2026/214501;;Projeto elétrico e SPDA de galpão logístico;Galpão logístico Tarumã;Validada;11/09/2026;Crea-AM;2026-09-06 11:00:00
+doc-ed-2;u-eduardo;ART;2026/214388;;Projeto de usina solar fotovoltaica de 150 kWp;Cobertura Solimões Energia;Validada;12/09/2026;Crea-AM;2026-09-06 12:00:00
+doc-ed-3;u-eduardo;ART;2025/198770;;Laudo de instalações elétricas industriais;Fábrica Distrito Industrial;Validada;13/08/2026;Crea-AM;2026-09-06 13:00:00
+doc-ed-4;u-eduardo;ART;2025/187412;;Projeto de subestação abrigada de 500 kVA;Indústria Rio Negro;Validada;14/08/2026;Crea-AM;2026-09-06 14:00:00
+doc-ed-5;u-eduardo;CAT;2025/0912;;Execução de SPDA e malha de aterramento;Centro de distribuição Aleixo;Validada;15/08/2026;Crea-AM;2026-09-06 15:00:00
+doc-ed-6;u-eduardo;ART;2025/176305;;Compatibilização BIM de instalações elétricas;Edifício Adrianópolis;Validada;16/08/2026;Crea-AM;2026-09-06 16:00:00

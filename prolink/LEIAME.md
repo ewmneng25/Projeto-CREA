@@ -5,10 +5,179 @@ servidor. A base de dados fica inteira em arquivos CSV na pasta `dados/`, lidos 
 gravados pela própria página.
 Nada vem da internet: ícones são SVG inline, as imagens da Miranda ficam em
 `assets/img/`, e todas as telas funcionam offline — inclusive na apresentação do
-Demo Day. A única exceção é a conversa com a Miranda, que chama a API do Gemini
-e por isso precisa de internet; as dicas de tela dela funcionam offline.
+Demo Day. As exceções são a conversa com a Miranda (por texto e, no modo de acessibilidade, por voz),
+que chama a API do Gemini e por isso precisa de internet; as dicas de tela dela funcionam offline.
 
 
+
+
+## Acessibilidade (leitor de tela e teclado)
+
+Todas as 33 telas foram auditadas com o **axe-core** (WCAG 2.1 níveis A e AA e boas práticas), nas contas
+reais, nas contas de profissional, empresa e administrador e com diálogos, tour e notificações abertos:
+**nenhuma violação**. O módulo `app/views/acessibilidade.js`, carregado em todas as telas, cuida do que vale
+para o sistema inteiro:
+
+- **Diálogos** (denúncia, editar perfil, manifestar interesse, encerrar demanda, avaliação,
+  chave do Gemini e o tour da Miranda): o foco entra no diálogo, fica preso nele com Tab e Shift+Tab, Esc fecha
+  e o foco volta para o botão que o abriu.
+- **Títulos**: hierarquia sem saltos para o leitor de tela (ajustada com `aria-level`, sem mudar o visual).
+- **Grupos de opção** (tipo de conta, ): as setas do teclado trocam a opção.
+- **Regiões vivas**: erros e situações do cadastro e do portfólio são lidos assim que aparecem.
+- **Áreas com rolagem** (conversa, notificações) recebem foco pelo teclado.
+- **Olhinho nas senhas** (`app/views/ver-senha.js`): todo campo de senha — entrar, criar conta, recuperar acesso,
+  trocar senha e a chave do Gemini — tem um botão para mostrar ou esconder o que foi digitado. É um botão de verdade,
+  com nome fixo ("Mostrar senha") e estado em `aria-pressed`; funciona com Enter e Espaço e não tira o foco do
+  campo ao ser clicado. O campo fica marcado com `data-senha`, então, mesmo visível, a assistente de voz nunca lê nem
+  repete a senha.
+
+Além disso: o tour da Miranda entrega a fala inteira ao leitor de tela (a digitação letra por letra é só
+visual); a resposta da Miranda é lida quando termina de ser escrita (`aria-busy`); ao trocar de etapa no
+cadastro, o foco vai para o título da etapa; campos obrigatórios têm `aria-required`; o campo de documento
+com erro fica `aria-invalid` e aponta para o aviso; as notificações são links de verdade; o contraste dos
+contadores do menu e da hora das mensagens enviadas passou de 3,4:1 para mais de 4,5:1; o foco é sempre
+visível; e quem ativa "reduzir movimento" no sistema operacional não vê animações longas.
+
+## Modo de acessibilidade por voz (Gemini Live API)
+
+O ProLink **começa com a voz ligada**. Na página inicial, assim que o splash sai, o **modo de acessibilidade**
+já liga sozinho, e uma caixinha pergunta se a pessoa quer **continuar usando a voz ou desativar** — a Miranda faz
+a mesma pergunta em voz alta, e dá para responder clicando ou falando (a resposta falada chega pela ferramenta
+`responder_pergunta_da_voz`). A pergunta aparece uma vez por sessão do navegador. Quem desativa não tem a voz
+ligada sozinha de novo naquela sessão (Alt + M oferece o modo outra vez). Ligada, a Miranda conversa **por voz, em
+tempo real**, e acompanha a pessoa em todas as telas — e nas próximas visitas — até o modo ser desativado.
+
+Os navegadores só deixam uma página tocar som depois de um toque de tecla ou clique nela: aberto sem nenhum toque,
+a caixinha já está na tela e a voz da Miranda sai no primeiro toque (qualquer tecla, inclusive Tab, ou clique).
+Pelo F5 do VS Code, com a configuração do projeto, a voz sai sozinha. A ideia é que quem tem deficiência visual
+consiga usar o sistema inteiro só falando: pesquisar oportunidades, profissionais e empresas, entrar na conta ou
+entrar na conta, preencher e enviar formulários, publicar demandas, ler notificações e ouvir o resumo da conta.
+
+**API e modelo.** Usa o bate-papo de áudio ao vivo da Gemini API (Live API, WebSocket
+`BidiGenerateContent`), com modelos do **nível gratuito**, em ordem de tentativa:
+
+```js
+var MODELOS_LIVE = ["gemini-3.8-live", "gemini-3.1-flash-live-preview"];
+```
+
+Se o primeiro recusar (modelo indisponível ou sem cota), a moldura tenta o segundo. A chave é a mesma da conversa por texto: a colada com **Ctrl + Espaço** (fica só no `sessionStorage`). Quem ativa o modo sem chave vê a caixinha da chave logo em seguida; ao clicar em "Usar esta chave", a voz conecta.
+Sem chave, com a chave recusada ou sem internet, a Miranda avisa com gentileza — pela voz do próprio
+navegador — que o assistente de voz não está funcionando no momento, e o sistema continua pelo teclado e pelo
+leitor de tela.
+
+**Como funciona.** `acessivel.html` é uma moldura: mostra a tela do ProLink num quadro e mantém, fora dele, a
+conexão de áudio aberta — por isso a voz não cai ao trocar de tela. Com o modo ligado, qualquer tela aberta
+direto no navegador é levada para dentro da moldura (um script no `<head>` de cada página faz isso antes de
+ela aparecer).
+
+| Arquivo | Papel |
+|---|---|
+| `app/views/boas-vindas.js` | Caixinha de boas-vindas depois do splash; atalho Alt + M para ativar em qualquer tela |
+| `app/views/voz-moldura.js` | Conexão com a Live API, microfone (PCM 16 kHz), reprodução (24 kHz), reconexão e barra de voz |
+| `app/views/voz-agente.js` | A "mão" da Miranda dentro da tela: lê a tela, clica, preenche, navega e pesquisa na base |
+
+A moldura e a tela conversam por `postMessage`, então tudo funciona igual pelo Live Server, pelo
+`Abrir ProLink.bat`, pelo **F5 do VS Code** e com o `index.html` aberto direto (endereço `file://`).
+
+**Som e F5.** O navegador só deixa uma página tocar som depois de um clique ou tecla nela. Por isso:
+- ao clicar em "Ativar", a moldura é montada na própria tela, sem trocar de página, e o clique libera o som na hora;
+- depois de um F5 (ou abrindo uma tela direto com o modo ligado), a Miranda já conecta sozinha e fica pronta; a
+  primeira tecla ou clique em qualquer lugar — inclusive dentro da tela — libera a voz, e ela avisa que continua
+  ouvindo. O botão "Iniciar assistente de voz" vem focado, para o leitor de tela anunciar;
+- pelo **F5 do VS Code**, a pasta `.vscode/launch.json` (na raiz do projeto e na pasta de fora) abre o Chrome ou
+  o Edge com `--autoplay-policy=no-user-gesture-required` e `--use-fake-ui-for-media-stream`: a voz sai sozinha e o
+  microfone é liberado sem perguntar, a cada F5.
+  Escolha "ProLink no Chrome (voz da Miranda sem clique)" na aba Executar e Depurar.
+
+Aberto como arquivo (`file://`), o Chrome recusa o módulo de captura de áudio carregado de `blob:`; a moldura
+tenta então `data:` e, se preciso, o `ScriptProcessor`, que funciona em qualquer origem. O microfone envia o
+mesmo PCM de 16 kHz nos três caminhos.
+
+**O que a Miranda pode fazer** (ferramentas declaradas para o modelo): `ler_tela` (título, conta, diálogo
+aberto, avisos, texto e a lista numerada de elementos), `navegar`, `voltar`, `clicar`, `preencher`, `focar`,
+`rolar`, `pesquisar` (oportunidades com a compatibilidade, profissionais e empresas, direto na base),
+`resumo_da_conta`, `ler_notificacoes` e `desativar_modo_acessibilidade`.
+
+**Salvaguardas.**
+- Botões que publicam, enviam, salvam, excluem, manifestam interesse ou criam conta só são clicados com
+  `confirmado=true`, depois de a pessoa confirmar em voz; sem isso a ferramenta responde `precisa_confirmar`.
+- Escolher arquivo exige a própria pessoa (o navegador não abre a janela de arquivos por script): a Miranda leva
+  o foco até o botão e pede um Enter.
+- Senhas são preenchidas sem voltar para o modelo e nunca são repetidas em voz alta.
+- `navegar` só aceita páginas do próprio ProLink.
+- Enquanto a Miranda fala, o microfone não envia áudio (evita que ela ouça a própria voz pelo alto-falante).
+
+**Atalho em todas as telas.** Alt + M é escutado por dois caminhos: pelo agente de cada tela e, direto, pela
+moldura, que escuta o teclado dentro do quadro — o atalho funciona mesmo numa tela em que algo tenha falhado ao
+carregar. O manual em PDF e endereços de fora abrem em outra aba, para a voz e o atalho continuarem na tela.
+Depois de um F5, o primeiro Alt + M libera o som e já silencia o microfone. Foi conferido nas 33 telas (público,
+profissional, empresa e administração), com o foco no conteúdo ou num campo, com o tour da Miranda aberto, com o
+painel de notificações aberto e com o foco na barra de voz.
+
+**Controles.** A barra de voz, embaixo, mostra o estado (ouvindo, falando, mexendo na tela, microfone
+silenciado), a legenda da fala, a **transcrição** da conversa (onde também dá para escrever para ela) e
+**Desativar modo**. **Alt + M** silencia ou liga o microfone e, com a Miranda falando, interrompe a fala — funciona
+com o foco dentro da tela também. A sessão é retomada ao recarregar (`sessionResumption`), a janela de contexto
+é comprimida para conversas longas e a conexão é refeita sozinha se o servidor pedir (`goAway`) ou cair.
+
+**Funciona em qualquer PC: modo compatível.** A voz ao vivo depende de uma conexão contínua (WebSocket) com o
+Google, que alguns antivírus (inspeção de HTTPS), extensões do navegador, redes de escola ou empresa e proxies
+bloqueiam — e a cota gratuita da Live API é separada da cota da conversa por texto. Por isso, se a voz ao vivo não
+abrir em 12 segundos, for recusada, cair várias vezes, ficar sem resposta duas vezes ou estourar a cota, a Miranda
+passa sozinha para o **modo compatível**, pelo mesmo caminho HTTPS da conversa por texto (que funciona onde o
+site funciona):
+
+microfone → detecção de fala (por energia, adaptada ao ruído da sala) → WAV 16 kHz → `generateContent` com as mesmas
+ferramentas (`gemini-3.5-flash-lite`, `gemini-3.1-flash-lite`, `gemini-3-flash-preview`) → resposta lida pela voz do
+próprio sistema (`speechSynthesis`, voz pt-BR do Windows).
+
+Ela avisa na transcrição por que mudou, e o modo vale até fechar a aba (depois de um F5 já começa nele, sem
+esperar). A diferença para quem usa: responde logo depois que a pessoa para de falar, em vez de em tempo real, e a
+voz é a do computador. Se o Windows não tiver a voz em português instalada, a fala sai com outra voz — instale em
+Configurações > Hora e idioma > Fala.
+
+**Microfone em qualquer PC.** Se o driver recusar as opções de áudio, o pedido é refeito da forma mais simples; se
+o microfone trabalhar numa taxa diferente da saída de som (Firefox, fones Bluetooth), a captura ganha um contexto
+de áudio próprio na taxa do microfone. Microfone bloqueado, ausente ou ocupado por outro programa (Teams, Discord,
+Zoom) gera um aviso que diz exatamente o que fazer, incluindo a permissão do Windows em Privacidade > Microfone.
+
+**Ela ouve você?** A barra de voz tem um medidor do nível do microfone (a barrinha verde ao lado das ondas): se ele
+não se mexe quando você fala, o som não está chegando. A moldura confere isso sozinha:
+- **microfone mudo ou errado** (Windows usando um fone desconectado, "Mixagem estéreo" ou a entrada da webcam como
+  padrão, ou o microfone mudo): 9 segundos de silêncio absoluto fazem ela testar os outros microfones do computador,
+  um por um, e guardar o que funcionar; se nenhum captar som, ela explica o que conferir no Windows;
+- **a captura tem um motor de áudio só dela**, criado depois de o microfone abrir (o de reprodução nasce antes, no
+  clique; em alguns PCs — fone Bluetooth que muda de modo, placa de som que troca de dispositivo — ele passava a
+  receber só silêncio). Um medidor independente confere o som: se ele ouve e o caminho principal não, a captura troca
+  de método sozinha (módulo de áudio ↔ ScriptProcessor);
+- **escuta do navegador:** se a página continuar recebendo só silêncio depois de testar até dois outros microfones,
+  a Miranda passa a ouvir pelo reconhecimento de voz do próprio Chrome ou Edge, que capta o microfone por conta
+  própria. O texto reconhecido vai para ela (na voz ao vivo ou no modo compatível). Se nem assim o som chegar, o
+  aviso lista o que conferir no Windows (Privacidade > Microfone e Som > Entrada) e no cadeado do endereço;
+- **o microfone é pedido uma vez só.** Aberto como arquivo (F5 do VS Code, duplo clique), o Chrome não guarda a
+  permissão e perguntaria de novo a cada pedido. Por isso a moldura só testa outros microfones, religa um microfone
+  desconectado ou usa a escuta do navegador sozinha quando o navegador já guardou a permissão (Live Server,
+  `Abrir ProLink.bat`). Se a pessoa recusar, ela não insiste: o botão do microfone ou Alt + M pedem de novo. O
+  `launch.json` do VS Code abre o navegador já com a permissão concedida (`--use-fake-ui-for-media-stream`);
+- **escolher o microfone:** em Transcrição > Microfone há a lista dos microfones do computador; a escolha fica salva;
+- **falou e a voz ao vivo não reagiu:** a moldura também detecta a fala por conta própria. Se o servidor não der
+  nenhum sinal (nem a transcrição) em 7 segundos, a Miranda passa para o modo compatível e responde **àquela mesma
+  fala**, sem pedir para repetir;
+- o que você disse aparece na legenda da barra assim que é transcrito.
+
+**Se ela parar de responder.** A moldura se recupera sozinha dos travamentos conhecidos: resposta descartada
+depois de uma interrupção (corrigido), som do navegador congelado (troca de fone), microfone desconectado, conexão
+que cai e fala sem resposta por 20 segundos (refaz a conexão retomando a sessão e pede para repetir). Cada queda
+aparece na transcrição com o código. Se o limite gratuito da API acabar, ela avisa isso em vez de ficar muda. Para
+investigar, abra o console (F12) e rode `VozDiagnostico()`: mostra modelo, estado do WebSocket, do som e do
+microfone, blocos de áudio enviados, segundos desde a última mensagem da API, as últimas quedas com o motivo, o modo em uso,
+o erro do microfone, as taxas de áudio e se há voz em português instalada.
+
+**Testes.** Com a Live API simulada e microfone falso no Chromium: boas-vindas depois do splash, ativação,
+conexão e setup, áudio enviado em blocos de 100 ms, fala e interrupção, todas as ferramentas (inclusive entrar na
+entrar na conta só pela voz), confirmação de ações, modo permanente, retomada, reconexão, modelo reserva, chave
+recusada e desativação — nas duas formas de abrir (servidor local e duplo clique). A caixinha e a moldura passam
+no axe-core sem violações, em desktop e celular.
 
 ## Chave do Gemini pela interface
 
@@ -28,47 +197,54 @@ indisponível no momento. O tour guiado não usa IA e continua funcionando. O de
 
 Recomendado no Google Cloud: restringir a chave à API Generative Language, aos endereços do site e com cota baixa.
 
-## Base real e base de demonstração
+## Contas da apresentação e base de dados
 
-O ProLink guarda **duas bases separadas** no navegador:
+O modo de demonstração foi retirado. O sistema tem **uma base só** (`dados/*.csv`): a população de
+exemplo (60 profissionais, 24 empresas e contratantes, 59 demandas, 200 candidaturas, avaliações,
+uma fila de denúncias e a trilha de auditoria), as contas da equipe para apresentar o sistema e as
+contas criadas no cadastro.
 
-| Base | Onde está no projeto | Quando é usada |
-|---|---|---|
-| **Real** | `dados/*.csv` (só cabeçalhos: começa vazia) | Contas criadas no cadastro e tudo o que elas fazem |
-| **Demonstração** | `dados/demonstracao/*.csv` (dados fictícios) | Só no modo de demonstração |
+**Contas para apresentar** (tela Entrar: CPF, CNPJ ou e-mail, e a senha):
 
-- Entrar no modo de demonstração troca para a base fictícia (`ProLinkBanco.usarBase("demonstracao")`).
-  Sair da demonstração, ou abrir `index.html`, `login.html`, `cadastro.html` ou `recuperar.html`, volta para a base real.
-- As telas internas não têm mais números nem nomes fixos no HTML: painéis, perfis, avaliações,
+| Perfil | Nome | Entrar com | Senha |
+|---|---|---|---|
+| Profissional | Daniel Silva do Carmo (engenheiro civil) | CPF `037.590.362-36` ou `danicarmo240306@gmail.com` | `daniel123` |
+| Profissional | Eduardo Weber Martins Negreiros (engenheiro eletricista) | CPF `034.082.532-42` ou `ewmn.eng25@uea.edu.br` | `eduardo123` |
+| Empresa | DW Engenharia | CNPJ `12.345.678/0001-95` ou `contato@dwengenharia.com.br` | `dwengenharia123` |
+| Suporte (administrativo) | Suporte ProLink | `admsuporte@prolink.com.br` | `admsuporte123` |
+
+Os dois profissionais têm currículo fictício completo: resumo, competências, ARTs e CATs confirmadas,
+projetos, arquivos (currículo, diploma, certificados) e avaliações. Por isso o painel de cada um já
+sugere oportunidades com compatibilidade alta — inclusive as da DW Engenharia —, e a DW já recebe as
+candidaturas dos dois, ordenadas por compatibilidade, com conversa aberta com cada um.
+
+As contas são criadas por `dados/contas_apresentacao.py` (idempotente). As senhas ficam só como hash
+SHA-256 com sal (`senhaSal` e `senhaHash` em `usuarios.csv`), como as do cadastro. Nenhuma outra conta de
+exemplo entra com senha. Troque as senhas antes de publicar o projeto em algum lugar aberto.
+
+**Primeira abertura desta versão:** a base guardada no navegador é trocada inteira pela base do projeto
+(contas e dados de testes anteriores saem, e a sessão aberta é encerrada). Nas atualizações seguintes, a
+base volta a ser mesclada: o que foi criado no navegador fica, e só os registros novos do projeto entram.
+Se o navegador ainda mostrar a tela antiga, recarregue uma vez com Ctrl + Shift + R.
+
+**Cada conta nas suas telas.** Profissional só abre as telas de profissional; empresa e contratante, as de
+empresa; o suporte, as administrativas. Se uma conta cair na tela de outro tipo (link antigo, aba
+esquecida, botão Voltar), a página leva para o início certo em vez de mostrar um painel misturado.
+
+**Fila do setor administrativo.** São 28 denúncias, 21 delas na fila, para o suporte decidir em
+Denúncias: manter conteúdo, remover conteúdo ou bloquear o autor. Toda decisão entra na trilha de auditoria.
+
+- As telas internas não têm números nem nomes fixos no HTML: painéis, perfis, avaliações,
   cartão da lateral e contagens são montados por `app/controllers/conta.js` com os dados da conta da sessão.
-  Sem dado, a tela mostra que ainda não há. O conteúdo fica oculto até os dados serem desenhados.
 - Todo profissional que se cadastra ganha uma ficha em `profissionais.csv`, e é por ela que aparece nas
   buscas das empresas e entra no cálculo de compatibilidade.
-- A base de demonstração é gerada por `dados/gerar_demonstracao.py` (semente fixa: sempre a mesma base).
-  Para mudar ou ampliar: edite o script, rode `python3 dados/gerar_demonstracao.py` e depois `python3 build.py`.
-  Ela tem 60 profissionais, 86 usuários (24 empresas e contratantes), 57 demandas, 195 candidaturas,
-  51 avaliações com notas por critério, 8 denúncias e 60 registros de auditoria.
 
 ## Como abrir
 
 Abra o `index.html` com duplo clique. Não há servidor, instalação nem tela de
 configuração: a base de dados já vem pronta.
 
-**Modo de demonstração:** na tela de entrar, o botão **Usar modo de demonstração**
-abre um aviso de que profissionais, empresas, registros, documentos e dados são
-fictícios, estáticos e sem contas criadas, servindo só para demonstrar o sistema.
-Depois, a pessoa escolhe o perfil e informa o nome:
-
-| Perfil | Pede | Abre | Registro em `usuarios.csv` |
-|---|---|---|---|
-| Profissional (PF) | Seu nome | `inicio.html` | `u-prof-demo` (e `prof-001` em `profissionais.csv`) |
-| Empresa (PJ) | Nome da empresa | `empresa-inicio.html` | `u-emp-demo` |
-| Administrativo | Seu nome | `admin-inicio.html` | `u-admin-demo` |
-
-As telas abrem com esse nome, o tutorial da Miranda desde o começo e uma faixa no
-topo com **Sair da demonstração**. Cada nova demonstração zera as preferências, a
-privacidade e a conversa com a Miranda daquele perfil. Os três perfis não têm
-senha: só entram pelo modo de demonstração.
+**Sem conta:** o botão **Entrar como visitante** mostra oportunidades e perfis, sem publicar, candidatar-se nem conversar. Para apresentar, use as contas da seção anterior.
 
 **Entrar com conta:** com o **documento do cadastro (CPF ou CNPJ)** ou o **e-mail**, e a senha. O
 botão **Entrar** valida os campos, procura a conta em `usuarios.csv` pelo documento,
@@ -86,8 +262,8 @@ fica em texto no CSV: a conta guarda um sal e o hash SHA-256 (`senhaSal` e
 `senhaHash`). As contas nascem no cadastro, já com senha própria.
 
 O painel administrativo, inclusive **Configurações → Base de dados CSV** (baixar
-as tabelas e restaurar a base inicial), é acessado pelo perfil administrativo do
-modo de demonstração.
+as tabelas e restaurar a base inicial), é acessado pela conta do suporte
+(`admsuporte@prolink.com.br`).
 
 **Manual do usuário.** O PDF `manual-do-usuario.pdf` abre pelo ícone de documento na
 barra superior de qualquer tela interna, pelo rodapé das telas públicas e por um link
@@ -115,7 +291,7 @@ app/
 │   ├── componentes.js       Aviso, caixa de diálogo, download, formatação
 │   └── transicao.js         Splash e transição entre páginas
 └── controllers/             Um por área: eventos da tela + models + views
-    ├── sessao.js            Entrar, modo de demonstração, recuperar, sair, visitante
+    ├── sessao.js            Entrar, recuperar, sair, visitante e tela certa por tipo de conta
     ├── cadastro.js          Cadastro com consulta ao Crea
     ├── oportunidades.js     Oportunidades abertas e salvas
     ├── demandas.js          Minhas demandas, publicar e encerrar
@@ -180,7 +356,7 @@ acervo operacional vêm do Crea e só são exibidos. No perfil da empresa:
 O perfil público da empresa mostra logotipo, áreas e obras, com a indicação de fotos e
 de atestado. Contratante sem registro continua sem essa etapa.
 
-**Na demonstração**, a empresa (Daniel Tec) já vem com logotipo, apresentação, cinco
+**Na conta da DW Engenharia**, a empresa já vem com logotipo, apresentação, cinco
 áreas, três obras com fotos e atestados e três documentos; o profissional, com seis
 projetos (dois com arquivos anexados), currículo e certificados.
 
@@ -206,7 +382,7 @@ navegador) com a opção desmarcada.
 
 | Tabela | O que guarda |
 |---|---|
-| `usuarios.csv` | Contas: as seis de demonstração, as criadas no cadastro, situação (verificado, bloqueado, encerrada) |
+| `usuarios.csv` | Contas: as da apresentação, as de exemplo, as criadas no cadastro, situação (verificado, bloqueado, encerrada) |
 | `profissionais.csv` | Profissionais fictícios com áreas, competências e acervo |
 | `demandas.csv` | Demandas publicadas pelas empresas, com situação (aberta, encerrada) |
 | `candidaturas.csv` | Manifestações de interesse, com a compatibilidade calculada e os critérios |
@@ -272,6 +448,7 @@ prolink/
 ├── inicio.html         Painel do profissional
 ├── oportunidades.html  Busca com filtros laterais
 ├── miranda.html        Assistente virtual (bate-papo com IA)
+├── acessivel.html      Modo de acessibilidade: telas + Miranda por voz (Gemini Live)
 ├── portfolio.html      Meu portfólio: projetos, documentos técnicos e certificados
 ├── empresa-inicio.html       Painel de quem contrata
 ├── empresa-demandas.html     Demandas publicadas e candidaturas
@@ -370,7 +547,7 @@ Onde elas entram:
 
 | Ação | O que aparece |
 |---|---|
-| Entrar | "Entrando como Daniel Tec…" |
+| Entrar | "Entrando como DW Engenharia…" |
 | Entrar como visitante | "Entrando como visitante…" |
 | Criar conta, ao finalizar | "Criando sua conta…" |
 | Sair | "Encerrando sua sessão…" |
@@ -630,6 +807,10 @@ No topo da tela da Miranda, um bloco recolhido declara o que a assistente faz, o
 que **não** faz, os riscos assumidos, o que acontece com os dados da conversa e
 como reclamar de uma resposta.
 
+No modo de acessibilidade a declaração ganha um parágrafo próprio: por voz, a Miranda recebe o áudio da
+fala e o texto da tela aberta (que pode ter nome, e-mail e dados da conta) para agir a pedido da pessoa, e
+pergunta antes de publicar, enviar, salvar ou excluir.
+
 O ponto central da declaração: a Miranda explica, a regra ordena. Ela não
 participa de nenhuma decisão sobre pessoas — quem ordena é a regra de pesos
 fixos, auditável linha a linha. Essa separação é o que permite atender ao 12.3
@@ -793,12 +974,9 @@ provedor, para quê, quem supervisiona e — o mais importante — que a assiste
 explica mas **não decide**. Ela não ordena profissionais nem calcula
 compatibilidade; isso é regra determinística e auditável.
 
-## Conta de demonstração
+## Contas da apresentação
 
-A base inicial tem só os três perfis de demonstração (profissional, empresa e
-administrativo), acessados pelo botão **Usar modo de demonstração** da tela de
-entrar (veja **Como abrir**). Contas de
-profissional, empresa ou contratante nascem no cadastro.
+Daniel e Eduardo (profissionais), DW Engenharia (empresa) e o suporte administrativo — veja **Contas da apresentação e base de dados**. As demais contas nascem no cadastro.
 
 ## Privacidade e dados (RF01 e item 11.3)
 
@@ -814,8 +992,8 @@ de conta com exclusão lógica.
 ### Restringir muda a nota — e isso é proposital
 
 Desligar *acervo técnico* ou *avaliações* derruba a compatibilidade na hora, e o
-painel lateral mostra o novo número antes de a pessoa sair da tela. Na sessão de
-demonstração, a média cai de 76% para 56% sem o acervo, e para 42% sem os dois.
+painel lateral mostra o novo número antes de a pessoa sair da tela. Na conta do
+Daniel, a média cai de 76% para 56% sem o acervo, e para 42% sem os dois.
 
 A razão é simples: **se um dado não pode ser mostrado, ele também não pode pesar
 a favor de quem o escondeu**. Continuar pontuando com informação restrita seria
@@ -988,12 +1166,9 @@ Upload sobrou para a aba **Outros**: diploma, certificação, comprovante de
 curso. Coisas que o Crea não emite e a API não consulta — aceitam anexo, mas não
 recebem selo de verificado.
 
-## Sessão de demonstração
+## Sessão
 
-`login.html` já vem preenchido e o botão **Entrar** grava uma sessão fictícia de
-**Daniel Silva do Carmo**, engenheiro civil registrado no Crea-AM. O perfil é
-inventado para a apresentação: o item 11.2 do edital proíbe dados pessoais reais
-na competição.
+Entra-se com uma das contas da apresentação ou com uma conta criada no cadastro. Os perfis são inventados para a apresentação: o item 11.2 do edital proíbe dados pessoais reais de terceiros.
 
 A conta fica em `dados/usuarios.csv`; o navegador guarda só o id da sessão. Ela alimenta o
 nome, as iniciais, o registro e o RNP em todas as telas — inclusive o campo RNP
@@ -1301,12 +1476,9 @@ provedor, para quê, quem supervisiona e — o mais importante — que a assiste
 explica mas **não decide**. Ela não ordena profissionais nem calcula
 compatibilidade; isso é regra determinística e auditável.
 
-## Conta de demonstração
+## Contas da apresentação
 
-A base inicial tem só os três perfis de demonstração (profissional, empresa e
-administrativo), acessados pelo botão **Usar modo de demonstração** da tela de
-entrar (veja **Como abrir**). Contas de
-profissional, empresa ou contratante nascem no cadastro.
+Daniel e Eduardo (profissionais), DW Engenharia (empresa) e o suporte administrativo — veja **Contas da apresentação e base de dados**. As demais contas nascem no cadastro.
 
 ## Privacidade e dados (RF01 e item 11.3)
 
@@ -1322,8 +1494,8 @@ de conta com exclusão lógica.
 ### Restringir muda a nota — e isso é proposital
 
 Desligar *acervo técnico* ou *avaliações* derruba a compatibilidade na hora, e o
-painel lateral mostra o novo número antes de a pessoa sair da tela. Na sessão de
-demonstração, a média cai de 76% para 56% sem o acervo, e para 42% sem os dois.
+painel lateral mostra o novo número antes de a pessoa sair da tela. Na conta do
+Daniel, a média cai de 76% para 56% sem o acervo, e para 42% sem os dois.
 
 A razão é simples: **se um dado não pode ser mostrado, ele também não pode pesar
 a favor de quem o escondeu**. Continuar pontuando com informação restrita seria
@@ -1496,12 +1668,9 @@ Upload sobrou para a aba **Outros**: diploma, certificação, comprovante de
 curso. Coisas que o Crea não emite e a API não consulta — aceitam anexo, mas não
 recebem selo de verificado.
 
-## Sessão de demonstração
+## Sessão
 
-`login.html` já vem preenchido e o botão **Entrar** grava uma sessão fictícia de
-**Daniel Silva do Carmo**, engenheiro civil registrado no Crea-AM. O perfil é
-inventado para a apresentação: o item 11.2 do edital proíbe dados pessoais reais
-na competição.
+Entra-se com uma das contas da apresentação ou com uma conta criada no cadastro. Os perfis são inventados para a apresentação: o item 11.2 do edital proíbe dados pessoais reais de terceiros.
 
 A conta fica em `dados/usuarios.csv`; o navegador guarda só o id da sessão. Ela alimenta o
 nome, as iniciais, o registro e o RNP em todas as telas — inclusive o campo RNP

@@ -1,1 +1,21 @@
 ﻿id;usuarioId;categoria;referenciaId;nome;detalhe;tamanho;criadoEm
+arq-cur-1;u-daniel;curriculo;;curriculo-daniel-silva-do-carmo.pdf;Enviado em 04/09/2026 · lido pela análise;820 KB;2026-09-04 10:00:00
+arq-cer-1;u-daniel;certificado;;diploma-engenharia-civil-ufam.pdf;Universidade Federal do Amazonas · 2018;1,2 MB;2026-09-04 10:00:00
+arq-cer-2;u-daniel;certificado;;curso-revit-estrutural.pdf;Certificação BIM · 2024;640 KB;2026-09-04 10:01:00
+arq-cer-3;u-daniel;certificado;;nr-35-trabalho-em-altura.pdf;Válido até 03/2027;410 KB;2026-09-04 10:02:00
+arq-dw-01;u-dw-engenharia;foto-obra;obr-01;galpao-estrutura-montada.jpg;Foto da obra;2,4 MB;2026-09-05 10:01:00
+arq-dw-02;u-dw-engenharia;foto-obra;obr-01;galpao-cobertura-concluida.jpg;Foto da obra;2,1 MB;2026-09-05 10:02:00
+arq-dw-03;u-dw-engenharia;atestado;obr-01;atestado-capacidade-galpao.pdf;Atestado de capacidade técnica · emitido pelo cliente;380 KB;2026-09-05 10:03:00
+arq-dw-04;u-dw-engenharia;foto-obra;obr-02;subestacao-quadros.jpg;Foto da obra;1,8 MB;2026-09-05 10:04:00
+arq-dw-05;u-dw-engenharia;foto-obra;obr-03;escola-iranduba-fachada.jpg;Foto da obra;2,6 MB;2026-09-05 10:05:00
+arq-dw-06;u-dw-engenharia;atestado;obr-03;atestado-capacidade-escola.pdf;Atestado de capacidade técnica · emitido pelo cliente;420 KB;2026-09-05 10:06:00
+arq-dw-07;u-dw-engenharia;certificacao;;iso-9001-daniel-tec.pdf;ISO 9001 · válida até 08/2027;610 KB;2026-09-05 10:07:00
+arq-dw-08;u-dw-engenharia;apresentacao;;apresentacao-institucional-daniel-tec.pdf;Apresentação institucional;3,2 MB;2026-09-05 10:08:00
+arq-dw-09;u-dw-engenharia;estrutura;;relacao-equipamentos-frota.pdf;Estrutura disponível: equipamentos e frota;290 KB;2026-09-05 10:09:00
+arq-dw-10;u-daniel;projeto;proj-01;planta-estrutural-residencial-manaos.pdf;Planta e memorial;4,8 MB;2026-09-05 10:10:00
+arq-dw-11;u-daniel;projeto;proj-01;fundacao-concretagem.jpg;Foto da obra;2,2 MB;2026-09-05 10:11:00
+arq-dw-12;u-daniel;projeto;proj-02;diagrama-unifilar-industria-norte.pdf;Projeto elétrico;1,9 MB;2026-09-05 10:12:00
+arq-ed-cur;u-eduardo;curriculo;;curriculo-eduardo-negreiros.pdf;Enviado em 06/09/2026 · lido pela análise;760 KB;2026-09-06 16:00:00
+arq-ed-dip;u-eduardo;certificado;;diploma-engenharia-eletrica-uea.pdf;Universidade do Estado do Amazonas;1,1 MB;2026-09-06 16:00:00
+arq-ed-nr10;u-eduardo;certificado;;certificado-nr10-sep.pdf;NR-10 básico e SEP · 2026;420 KB;2026-09-06 16:00:00
+arq-ed-bim;u-eduardo;certificado;;curso-revit-mep.pdf;Certificação BIM · 2025;580 KB;2026-09-06 16:00:00

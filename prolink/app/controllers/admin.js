@@ -394,7 +394,15 @@
       if (contadorFila) { contadorFila.textContent = naFila; contadorFila.hidden = !naFila; }
       var navDenuncias = document.querySelector('.nav a[href="admin-denuncias.html"] .nav-contador');
       if (navDenuncias) { navDenuncias.textContent = naFila; navDenuncias.hidden = !naFila; }
+      var resumo = document.getElementById("resumo-denuncias");
+      if (resumo) {
+        var total = ProLinkModelos.denuncias.listar().length;
+        resumo.textContent = naFila + (naFila === 1 ? " denúncia na fila" : " denúncias na fila") + " · " +
+          (total - naFila) + (total - naFila === 1 ? " resolvida" : " resolvidas") +
+          " · toda decisão tem autor, data e fundamento registrados.";
+      }
     };
+    atualizarFila();
 
     var decidir = function (card, manter) {
       var titulo = card.querySelector("h3").textContent.trim();
@@ -444,6 +452,12 @@
           var autor = ProLinkModelos.usuarios.listar().filter(function (u) {
             return U.normalizar(u.nome) === U.normalizar(den.alvo);
           })[0];
+          /* Denúncia contra uma demanda: o autor é a empresa que a publicou. */
+          var numero = !autor && /demanda\s+(\d{4})\/(\d+)/i.exec(den.alvo || "");
+          if (numero) {
+            var demanda = ProLinkModelos.demandas.buscar(numero[1] + "-" + numero[2]);
+            autor = demanda && ProLinkModelos.usuarios.buscar(demanda.empresaUsuarioId);
+          }
           if (!autor) {
             U.avisar("O alvo desta denúncia (" + U.escapar(den.alvo) + ") não é uma conta da base.", "atencao");
             return;

@@ -31,9 +31,9 @@
     }
 
     function mostrar(classe, titulo, corpo) {
+      retorno.hidden = false;
       retorno.className = "retorno-crea " + classe;
       retorno.innerHTML = "<strong>" + escapar(titulo) + "</strong>" + (corpo || "");
-      retorno.hidden = false;
     }
 
     botao.addEventListener("click", function () {

@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "ProLink no Chrome (voz da Miranda sem clique)",
+      "request": "launch",
+      "file": "${workspaceFolder}/index.html",
+      "runtimeArgs": [
+        "--autoplay-policy=no-user-gesture-required",
+        "--use-fake-ui-for-media-stream"
+      ]
+    },
+    {
+      "type": "msedge",
+      "name": "ProLink no Edge (voz da Miranda sem clique)",
+      "request": "launch",
+      "file": "${workspaceFolder}/index.html",
+      "runtimeArgs": [
+        "--autoplay-policy=no-user-gesture-required",
+        "--use-fake-ui-for-media-stream"
+      ]
+    }
+  ]
+}

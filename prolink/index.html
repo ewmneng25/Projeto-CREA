@@ -2,6 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script>
+  (function () {
+    try {
+      if (window.top === window && window.localStorage.getItem("prolink_modo_voz") === "1") {
+        var p = window.location.pathname.split("/").pop() || "index.html";
+        window.location.replace("acessivel.html?p=" + encodeURIComponent(p + window.location.search + window.location.hash));
+      }
+    } catch (erro) { /* sem armazenamento: segue a tela comum */ }
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ProLink · Conecte. Valide. Construa.</title>
 <meta name="description" content="A plataforma que conecta profissionais técnicos e impulsiona grandes projetos.">
@@ -137,12 +147,15 @@
         licitação, seleção, fiscalização ou verificação documental.</span>
 </footer>
 
-<script src="app/views/chave-gemini.js"></script>
-<script src="app/views/icones.js"></script>
-<script src="app/views/transicao.js"></script>
-<script src="dados/base-inicial.js"></script>
-<script src="dados/base-demonstracao.js"></script>
-<script src="app/core/arquivos-locais.js"></script>
-<script src="app/core/banco.js" data-scripts="models/repositorios.js,core/app.js,views/componentes.js,controllers/interface.js,controllers/sessao.js,controllers/cadastro.js,controllers/perfil.js,controllers/denuncias.js,controllers/notificacoes.js,controllers/miranda-guia.js"></script>
+<script src="app/views/chave-gemini.js?v=d7fb6a9830"></script>
+<script src="app/views/acessibilidade.js?v=d7fb6a9830"></script>
+<script src="app/views/ver-senha.js?v=d7fb6a9830"></script>
+<script src="app/views/voz-agente.js?v=d7fb6a9830"></script>
+<script src="app/views/boas-vindas.js?v=d7fb6a9830"></script>
+<script src="app/views/icones.js?v=d7fb6a9830"></script>
+<script src="app/views/transicao.js?v=d7fb6a9830"></script>
+<script src="dados/base-inicial.js?v=d7fb6a9830"></script>
+<script src="app/core/arquivos-locais.js?v=d7fb6a9830"></script>
+<script src="app/core/banco.js?v=d7fb6a9830" data-scripts="models/repositorios.js,core/app.js,views/componentes.js,controllers/interface.js,controllers/sessao.js,controllers/cadastro.js,controllers/perfil.js,controllers/denuncias.js,controllers/notificacoes.js,controllers/miranda-guia.js"></script>
 </body>
 </html>

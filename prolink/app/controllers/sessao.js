@@ -1,5 +1,5 @@
 /* ============================================================
-   ProLink — controller: entrar, modo de demonstração, recuperar acesso, sair e visitante
+   ProLink — controller: entrar, recuperar acesso, sair, visitante e tela certa para cada tipo de conta
    ============================================================ */
 (function () {
   "use strict";
@@ -12,10 +12,10 @@
   var hashDaSenha = App.hashDaSenha;
 
   /* -----------------------------------------------------------------------
-     Contas de demonstração
-     A base inicial tem só os três perfis de demonstração (u-prof-demo,
-     u-emp-demo e u-admin-demo), usados pelo botão "Usar modo de demonstração". Contas de verdade nascem
-     no cadastro. Dados fictícios: o item 11.2 do edital proíbe dados reais.
+     Contas da apresentação (dados/contas_apresentacao.py): dois
+     profissionais, uma empresa e o suporte administrativo. As demais
+     contas nascem no cadastro. Dados fictícios: o item 11.2 do edital
+     proíbe dados reais de terceiros.
      ----------------------------------------------------------------------- */
 
   /* -----------------------------------------------------------------------
@@ -34,6 +34,50 @@
     profissional: "inicio.html"
   };
 
+
+  /* -----------------------------------------------------------------------
+     Cada tipo de conta nas suas telas
+
+     O menu, a busca do topo e os painéis seguem o tipo da conta. Uma conta
+     aberta na tela de outro tipo (link antigo, aba esquecida, voltar do
+     navegador) veria um painel misturado — por exemplo, o de profissional
+     com cara de empresa. Então a página confere e leva para o início certo.
+     ----------------------------------------------------------------------- */
+  var TELAS_SO_DO_PROFISSIONAL = ["inicio.html", "candidaturas.html", "portfolio.html", "perfil.html",
+                                  "configuracoes.html", "mensagens.html", "avaliacoes.html"];
+  (function manterNaTelaDoTipo() {
+    var conta = lerUsuarioSalvo();
+    if (!conta || conta.visitante) { return; }
+    var pagina = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+    var tipo = conta.tipoConta === "contratante" ? "empresa" : conta.tipoConta;
+    var ladoDaTela = pagina.indexOf("admin-") === 0 ? "admin"
+                   : pagina.indexOf("empresa-") === 0 ? "empresa"
+                   : TELAS_SO_DO_PROFISSIONAL.indexOf(pagina) !== -1 ? "profissional" : "";
+    if (!ladoDaTela || !DESTINO_POR_TIPO[tipo] || ladoDaTela === tipo) { return; }
+    window.location.replace(DESTINO_POR_TIPO[tipo]);
+  })();
+
+  /* -----------------------------------------------------------------------
+     Cada tipo de conta nas suas telas
+
+     O menu, a busca do topo e os painéis seguem o tipo da conta. Uma conta
+     aberta na tela de outro tipo (link antigo, aba esquecida, voltar do
+     navegador) veria um painel misturado — por exemplo, o de profissional
+     com cara de empresa. Então a página confere e leva para o início certo.
+     ----------------------------------------------------------------------- */
+  var TELAS_SO_DO_PROFISSIONAL = ["inicio.html", "candidaturas.html", "portfolio.html", "perfil.html",
+                                  "configuracoes.html", "mensagens.html", "avaliacoes.html"];
+  (function manterNaTelaDoTipo() {
+    var conta = lerUsuarioSalvo();
+    if (!conta || conta.visitante) { return; }
+    var pagina = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+    var tipo = conta.tipoConta === "contratante" ? "empresa" : conta.tipoConta;
+    var ladoDaTela = pagina.indexOf("admin-") === 0 ? "admin"
+                   : pagina.indexOf("empresa-") === 0 ? "empresa"
+                   : TELAS_SO_DO_PROFISSIONAL.indexOf(pagina) !== -1 ? "profissional" : "";
+    if (!ladoDaTela || !DESTINO_POR_TIPO[tipo] || ladoDaTela === tipo) { return; }
+    window.location.replace(DESTINO_POR_TIPO[tipo]);
+  })();
 
   var campoIdentificacao = document.getElementById("identificacao");
   var campoSenha = document.getElementById("senha");
@@ -125,188 +169,6 @@
       campo.addEventListener("input", function () { erroNoCampo(campo, ""); });
     });
   }
-
-  /* -----------------------------------------------------------------------
-     Modo de demonstração
-
-     Não é login: ninguém cria conta. A pessoa lê o aviso de que os dados
-     são fictícios, escolhe o perfil (profissional, empresa ou
-     administrativo), informa o nome e entra nas telas daquele perfil,
-     com o nome dela e o tutorial da Miranda como num primeiro acesso.
-     Os três perfis ficam em usuarios.csv, sem senha.
-     ----------------------------------------------------------------------- */
-  var PERFIS_DEMONSTRACAO = {
-    profissional: {
-      id: "u-prof-demo", profissionalId: "prof-001", destino: "inicio.html",
-      titulo: "Profissional", sigla: "PF",
-      descricao: "Engenheiro com registro no Crea: oportunidades, candidaturas, portfólio e acervo.",
-      pergunta: "Como você se chama?", rotulo: "Seu nome", exemplo: "Ex.: Maria Souza",
-      explicacao: "O nome aparece nas telas no lugar do profissional fictício."
-    },
-    empresa: {
-      id: "u-emp-demo", destino: "empresa-inicio.html",
-      titulo: "Empresa", sigla: "PJ",
-      descricao: "Empresa registrada: publica demandas, recebe candidaturas e busca profissionais.",
-      pergunta: "Qual o nome da empresa?", rotulo: "Nome da empresa", exemplo: "Ex.: Souza Engenharia",
-      explicacao: "Nas telas de empresa, quem aparece é a empresa: o nome dela entra no lugar da fictícia."
-    },
-    admin: {
-      id: "u-admin-demo", destino: "admin-inicio.html",
-      titulo: "Administrativo", sigla: "ADM",
-      descricao: "Equipe do Crea-AM: usuários, denúncias e trilha de auditoria.",
-      pergunta: "Como você se chama?", rotulo: "Seu nome", exemplo: "Ex.: Maria Souza",
-      explicacao: "O nome aparece nas telas e nas decisões registradas na trilha de auditoria."
-    }
-  };
-
-  function iniciaisDoNome(nome) {
-    var partes = String(nome).trim().split(/\s+/);
-    return (partes[0].charAt(0) + (partes.length > 1 ? partes[partes.length - 1].charAt(0) : "")).toUpperCase();
-  }
-
-  function comecarDemonstracao(tipo, nome) {
-    /* A demonstração usa a base fictícia, separada da base real. */
-    ProLinkModelos.base.usarBase("demonstracao").then(function () {
-      if (!ProLinkModelos.usuarios.buscar(PERFIS_DEMONSTRACAO[tipo].id)) {
-        ProLinkModelos.base.usarBase("real");
-        alert("A base de demonstração não está disponível neste navegador.");
-        return;
-      }
-      prepararDemonstracao(tipo, nome);
-    });
-  }
-
-  function prepararDemonstracao(tipo, nome) {
-    var perfil = PERFIS_DEMONSTRACAO[tipo];
-    var anterior = (ProLinkModelos.usuarios.buscar(perfil.id) || {}).nome || "";
-    var sobreAtual = (ProLinkModelos.usuarios.buscar(perfil.id) || {}).sobre || "";
-    ProLinkModelos.usuarios.atualizar(perfil.id, {
-      nome: nome, primeiroAcesso: true, modoDemonstracao: true,
-      sobre: anterior ? sobreAtual.split(anterior).join(nome) : sobreAtual
-    });
-    if (perfil.profissionalId) {
-      ProLinkModelos.profissionais.atualizar(perfil.profissionalId, { nome: nome, iniciais: iniciaisDoNome(nome) });
-    }
-    /* Na demonstração de empresa, as demandas da empresa levam o nome digitado. */
-    var idsDemandas = [];
-    ProLinkModelos.demandas.listar({ empresaUsuarioId: perfil.id }).forEach(function (d) {
-      idsDemandas.push(d.id);
-      ProLinkModelos.demandas.atualizar(d.id, { empresa: nome, empresaIniciais: iniciaisDoNome(nome) });
-    });
-    ProLinkModelos.candidaturas.listar().forEach(function (c) {
-      if (idsDemandas.indexOf(c.demandaId) !== -1) { ProLinkModelos.candidaturas.atualizar(c.id, { empresa: nome }); }
-    });
-    /* Primeira vez de verdade: tutorial do começo e nada da visita anterior. */
-    ["configuracoes", "privacidade", "miranda_mensagens"].forEach(function (tabela) {
-      ProLinkModelos[tabela].excluirOnde({ usuarioId: perfil.id });
-    });
-    ProLinkModelos.sessao.entrar(perfil.id);
-    ProLinkModelos.auditoria.registrar("Modo de demonstração", perfil.titulo + " · " + nome, "demonstracao");
-    irCom("Preparando a demonstração…", perfil.destino);
-  }
-
-  function pedirNomeDaDemonstracao(tipo) {
-    var I = window.ProLinkInteracoes;
-    var perfil = PERFIS_DEMONSTRACAO[tipo];
-    I.dialogo({
-      titulo: perfil.pergunta,
-      texto: perfil.explicacao,
-      corpo: '<div class="campo"><label for="nome-demonstracao">' + perfil.rotulo + "</label>" +
-             '<input id="nome-demonstracao" type="text" maxlength="60" autocomplete="' +
-             (tipo === "empresa" ? "organization" : "name") + '" placeholder="' + perfil.exemplo + '"></div>',
-      cancelar: "Voltar",
-      confirmar: "Começar demonstração",
-      aoConfirmar: function (caixa) {
-        var nome = caixa.querySelector("#nome-demonstracao").value.trim().replace(/\s+/g, " ");
-        if (nome.length < 2) {
-          caixa.erro(tipo === "empresa" ? "Informe o nome da empresa para começar." : "Informe o seu nome para começar.");
-          return false;
-        }
-        var permitido = tipo === "empresa" ? /^[0-9A-Za-zÀ-ÖØ-öø-ÿ' .&-]+$/ : /^[A-Za-zÀ-ÖØ-öø-ÿ' .-]+$/;
-        if (!permitido.test(nome)) {
-          caixa.erro(tipo === "empresa" ? "Use letras, números, espaço, ponto, hífen ou &." : "Use só letras no nome.");
-          return false;
-        }
-        if (!Banco || !ProLinkModelos.base.disponivel()) {
-          caixa.erro("A base de demonstração não está disponível neste navegador.");
-          return false;
-        }
-        comecarDemonstracao(tipo, nome);
-      }
-    });
-    var campo = document.getElementById("nome-demonstracao");
-    if (campo) {
-      campo.focus();
-      campo.addEventListener("keydown", function (evento) {
-        if (evento.key === "Enter") {
-          evento.preventDefault();
-          campo.closest(".denuncia-caixa").querySelector('[data-dialogo="confirmar"]').click();
-        }
-      });
-    }
-  }
-
-  function escolherPerfilDaDemonstracao() {
-    var I = window.ProLinkInteracoes;
-    var escolhido = "";
-    var caixa = I.dialogo({
-      titulo: "Qual perfil você quer conhecer?",
-      texto: "Cada perfil mostra as telas de um tipo de usuário do ProLink.",
-      corpo: '<div class="perfis-demonstracao" role="radiogroup" aria-label="Perfil da demonstração">' +
-        Object.keys(PERFIS_DEMONSTRACAO).map(function (tipo) {
-          var p = PERFIS_DEMONSTRACAO[tipo];
-          return '<button class="opcao-caminho" type="button" role="radio" aria-checked="false" data-perfil-demo="' + tipo + '">' +
-            '<span class="sigla-perfil">' + p.sigla + "</span><strong>" + p.titulo + "</strong><span>" + p.descricao + "</span></button>";
-        }).join("") + "</div>",
-      cancelar: "Voltar",
-      confirmar: "Continuar",
-      aoConfirmar: function (dialogo) {
-        if (!escolhido) { dialogo.erro("Escolha um dos perfis para continuar."); return false; }
-        window.setTimeout(function () { pedirNomeDaDemonstracao(escolhido); }, 0);
-      }
-    });
-    caixa.querySelectorAll("[data-perfil-demo]").forEach(function (opcao) {
-      opcao.addEventListener("click", function () {
-        escolhido = opcao.getAttribute("data-perfil-demo");
-        caixa.erro("");
-        caixa.querySelectorAll("[data-perfil-demo]").forEach(function (outra) {
-          var marcada = outra === opcao;
-          outra.setAttribute("aria-checked", marcada ? "true" : "false");
-          if (marcada) { outra.setAttribute("aria-current", "true"); } else { outra.removeAttribute("aria-current"); }
-        });
-      });
-      opcao.addEventListener("dblclick", function () {
-        caixa.querySelector('[data-dialogo="confirmar"]').click();
-      });
-    });
-  }
-
-  function abrirDemonstracao() {
-    var I = window.ProLinkInteracoes;
-    if (!I) { return; }
-    I.dialogo({
-      titulo: "Modo de demonstração",
-      texto: "Antes de começar, um aviso importante.",
-      corpo:
-        '<div class="aviso-demonstrativo">' +
-        "<p><strong>Tudo o que você vai ver é demonstrativo.</strong> Os profissionais, as empresas, " +
-        "os registros, as ARTs e CATs, os documentos, as mensagens, as avaliações e as denúncias que " +
-        "aparecem nas telas são fictícios.</p>" +
-        "<p>Não foram criadas contas para essas pessoas e empresas: são dados estáticos, que servem " +
-        "apenas para mostrar como o ProLink funciona.</p>" +
-        "<p>O que você fizer durante a demonstração fica guardado só neste navegador e não é enviado " +
-        "a ninguém.</p></div>",
-      cancelar: "Voltar",
-      confirmar: "Entendi, continuar",
-      aoConfirmar: function () {
-        window.setTimeout(escolherPerfilDaDemonstracao, 0);
-      }
-    });
-  }
-
-  document.querySelectorAll("#entrar-demonstracao").forEach(function (botao) {
-    botao.addEventListener("click", abrirDemonstracao);
-  });
 
   /* -----------------------------------------------------------------------
      Recuperar acesso (RF01)
@@ -424,18 +286,7 @@
       return String(valor == null ? "" : valor).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    if (sessaoAtual.modoDemonstracao) {
-      faixa.className = "faixa-visitante faixa-boas-vindas faixa-demonstracao";
-      faixa.innerHTML =
-        "<div><strong>Modo de demonstração · Olá, " + textoSeguro(String(sessaoAtual.nome).split(/\s+/)[0]) +
-        "</strong><p>Profissionais, empresas, documentos e dados desta tela são fictícios e servem só para " +
-        "mostrar como o ProLink funciona.</p></div>" +
-        '<button class="btn btn-sm btn-secundario" type="button" data-sair-demonstracao>Sair da demonstração</button>';
-      faixa.querySelector("[data-sair-demonstracao]").addEventListener("click", function () {
-        var sair = document.getElementById("sair-da-sessao");
-        if (sair) { sair.click(); } else { ProLinkModelos.sessao.sair(); window.location.href = "login.html"; }
-      });
-    } else if (sessaoAtual.visitante) {
+    if (sessaoAtual.visitante) {
       faixa.innerHTML =
         '<div><strong>Você está navegando como visitante</strong>' +
         "<p>Dá para ver oportunidades e perfis, mas publicar demanda, enviar proposta e " +

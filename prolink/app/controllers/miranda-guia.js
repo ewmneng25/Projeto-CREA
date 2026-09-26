@@ -699,6 +699,13 @@
     desenhar();
   }
 
+  /** Texto do passo, sem marcação, para o leitor de tela. */
+  function textoParaLeitor(dado) {
+    var tmp = document.createElement("div");
+    tmp.innerHTML = String(dado.texto || "") + (dado.pontos && dado.pontos.length ? " " + dado.pontos.join(". ") + "." : "");
+    return tmp.textContent.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
   function desenhar() {
     var dado = roteiro[passo];
     var ultimo = passo === roteiro.length - 1;
@@ -716,11 +723,12 @@
       reposicionar = null;
     }
 
-    caixa = document.createElement("aside");
+    caixa = document.createElement("div");
     caixa.className = "tut-balao" + (elemento ? "" : " tut-balao-centro");
     caixa.setAttribute("role", "dialog");
-    caixa.setAttribute("aria-live", "polite");
-    caixa.setAttribute("aria-label", "Miranda: " + dado.titulo);
+    caixa.setAttribute("aria-modal", "true");
+    caixa.setAttribute("aria-labelledby", "tut-titulo-atual");
+    caixa.setAttribute("aria-describedby", "tut-descricao-atual");
 
     var pontosPasso = roteiro.map(function (_, i) {
       return '<span class="tut-ponto' + (i === passo ? " tut-ponto-atual" : "") +
@@ -744,14 +752,17 @@
       retrato +
       '<div class="tut-corpo">' +
         '<p class="tut-etiqueta">Miranda</p>' +
-        '<h2 class="tut-titulo">' + dado.titulo + "</h2>" +
-        '<p class="tut-texto"></p>' +
+        '<h2 class="tut-titulo" id="tut-titulo-atual">' + dado.titulo + "</h2>" +
+        /* O texto aparece letra por letra só para quem vê: o leitor de
+           tela recebe a fala inteira de uma vez, pela descrição. */
+        '<p class="sr-apenas" id="tut-descricao-atual">' + textoParaLeitor(dado) + "</p>" +
+        '<p class="tut-texto" aria-hidden="true"></p>' +
         '<ul class="tut-pontos" hidden></ul>' +
         '<div class="tut-rodape">' +
           '<div class="tut-passos" aria-hidden="true">' + pontosPasso + "</div>" +
           '<div class="tut-acoes">' +
             (ultimo ? "" : '<button class="btn btn-fantasma btn-sm" type="button" data-tut="pular">Pular</button>') +
-            '<button class="btn btn-sm" type="button" data-tut="seguir">' +
+            '<button class="btn btn-sm" type="button" data-tut="seguir" data-foco-inicial>' +
               (ultimo ? "Entendi" : "Continuar") +
             "</button>" +
           "</div>" +

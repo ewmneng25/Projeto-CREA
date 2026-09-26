@@ -77,12 +77,13 @@
         if (!href) { return; }
         item.dataset.ligado = "1";
         item.classList.add("notificacao-link");
-        item.setAttribute("role", "link");
-        item.setAttribute("tabindex", "0");
-        item.addEventListener("click", function () { window.location.href = href; });
-        item.addEventListener("keydown", function (evento) {
-          if (evento.key === "Enter") { window.location.href = href; }
-        });
+        /* Um link de verdade dentro do item: o leitor de tela anuncia
+           "link" e o teclado abre com Enter, sem papel falso no <li>. */
+        var link = document.createElement("a");
+        link.className = "notificacao-alvo";
+        link.href = href;
+        while (item.firstChild) { link.appendChild(item.firstChild); }
+        item.appendChild(link);
       });
       var ajustar = painel.querySelector(".notificacoes-rodape a");
       if (ajustar) {
@@ -107,7 +108,7 @@
                "autorização do provedor (OAuth) e crie a sessão com segurança. Este protótipo " +
                "roda só no navegador, então essa opção ainda não está disponível.",
         corpo: '<p class="dica">Para conhecer o sistema sem conta, use o botão ' +
-               "<strong>Usar modo de demonstração</strong> na tela de entrada.</p>",
+               "<strong>Entrar como visitante</strong> na tela de entrada.</p>",
         cancelar: false,
         confirmar: "Entendi",
         aoConfirmar: function () {

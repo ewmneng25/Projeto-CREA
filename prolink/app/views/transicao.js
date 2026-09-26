@@ -110,7 +110,11 @@
     window.setTimeout(function () {
       tela.classList.add("splash-saindo");
       document.documentElement.classList.remove("com-splash");
-      window.setTimeout(function () { tela.remove(); }, 420);
+      window.setTimeout(function () {
+        tela.remove();
+        /* Quem espera o splash sair (a caixinha de boas-vindas) é avisado. */
+        document.dispatchEvent(new CustomEvent("prolink:splash-fim"));
+      }, 420);
     }, reduzirMovimento ? 400 : DURACAO_SPLASH);
 
     marcarSplashVisto();

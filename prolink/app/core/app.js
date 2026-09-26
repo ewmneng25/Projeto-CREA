@@ -40,6 +40,7 @@
   function calcularIniciais(nome) {
     var partes = nome.trim().split(/\s+/).filter(Boolean);
     if (!partes.length) { return "--"; }
+    if (partes.length > 1 && /^[A-Z0-9]{2,3}$/.test(partes[0])) { return partes[0]; }
     var primeira = partes[0].charAt(0);
     var ultima = partes.length > 1 ? partes[partes.length - 1].charAt(0) : "";
     return (primeira + ultima).toUpperCase();

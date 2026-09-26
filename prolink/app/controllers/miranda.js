@@ -408,6 +408,9 @@
       return;
     }
 
+    /* Enquanto a resposta é escrita, a conversa fica "ocupada": o leitor
+       de tela espera o texto final em vez de ler cada letra. */
+    listaMensagens.setAttribute("aria-busy", "true");
     var porSegundo = Math.max(VELOCIDADE_BASE, texto.length / DURACAO_MAXIMA);
     var reveladas = 0;
     var instanteAnterior = null;
@@ -416,6 +419,7 @@
 
     function concluir() {
       revelacaoEmCurso = null;
+      listaMensagens.removeAttribute("aria-busy");
       destino.classList.remove("escrevendo");
       destino.innerHTML = formatarResposta(texto);
       if (estaNoFim()) { rolarParaOFim(); }

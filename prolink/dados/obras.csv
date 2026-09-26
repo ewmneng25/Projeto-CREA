@@ -1,1 +1,4 @@
 ﻿id;usuarioId;nome;cliente;cidade;periodo;area;porte;descricao;situacao;criadoEm
+obr-01;u-dw-engenharia;Galpão logístico Distrito Industrial;Operadora logística (sob sigilo);Manaus, AM;02/2026;Estrutura metálica;4.200 m²;Montagem da estrutura metálica e da cobertura, com equipe própria e responsável técnico da empresa.;Concluída;2026-09-01 09:00:00
+obr-02;u-dw-engenharia;Subestação Indústria Norte;Indústria de Alimentos Norte;Manaus, AM;Desde 06/2026;Instalações elétricas;1.500 kVA;Instalação elétrica da subestação abrigada e do sistema de proteção contra descargas atmosféricas.;Em execução;2026-09-02 09:00:00
+obr-03;u-dw-engenharia;Ampliação da escola estadual de Iranduba;Governo do Estado;Iranduba, AM;11/2025;Infraestrutura;1.200 m²;Execução da ampliação de 6 salas de aula, com fundação, estrutura e instalações.;Concluída;2026-09-03 09:00:00

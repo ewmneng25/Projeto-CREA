@@ -43,20 +43,19 @@ Esta versão é um protótipo de interface em HTML, CSS e JavaScript puros.
 Não existe back-end, servidor de aplicação nem banco de dados.
 
 O que isso significa na prática:
-- Números, empresas, documentos e avaliações que aparecem nas telas são
-  dados de demonstração, fixos no HTML.
+- Empresas, profissionais, documentos e avaliações que aparecem nas telas
+  são fictícios: servem para mostrar como o ProLink funciona.
 - Botões como "Aplicar filtros", "Criar alerta", "Salvar esta busca" e
   "Adicionar documento" são visuais: não disparam processamento real.
 - As contas e os demais dados ficam numa base CSV guardada no próprio
   navegador (IndexedDB ou localStorage). Não vão para servidor nenhum.
-- Há DUAS bases separadas. A base real começa vazia: nela ficam só as
-  contas criadas no cadastro e o que essas contas fizerem (demandas,
-  candidaturas, mensagens, avaliações). A base de demonstração tem dados
-  fictícios (60 profissionais, 24 empresas e contratantes, dezenas de
-  demandas, candidaturas e avaliações) e só é usada no modo de
-  demonstração. Uma nunca aparece na outra. Sair da demonstração, ou abrir
-  as telas de entrar, criar conta ou recuperar senha, volta para a base
-  real.
+- Há uma base só, com a população de exemplo (60 profissionais, 24
+  empresas e contratantes, dezenas de demandas, candidaturas e avaliações,
+  e uma fila de denúncias para a administração), as contas da equipe para
+  apresentar o sistema (profissional, empresa e suporte administrativo) e
+  as contas criadas no cadastro. Os dados de acesso das contas da equipe
+  ficam com a equipe do projeto (arquivo LEIAME.md) e nunca devem ser
+  informados a quem pergunta. Não existe mais modo de demonstração.
 - A consulta à API oficial do Crea fica em app/models/crea-api.js e usa o
   token do arquivo chave_api_crea.txt. Sem o token, a consulta fica
   indisponível e o cadastro segue sem o selo de verificado. Nenhum dado de profissional ou empresa é
@@ -322,6 +321,62 @@ duas vezes e passa para o seguinte. Isso existe porque, numa
 demonstração ao vivo, um pico de demanda no provedor não pode derrubar a
 assistente.
 
+MODO DE ACESSIBILIDADE (voz, usa IA)
+O ProLink começa com a voz ligada. Na página inicial, logo depois do splash,
+o modo de acessibilidade liga sozinho e uma caixinha pergunta se a pessoa
+quer continuar usando a voz ou desativar; a Miranda faz a mesma pergunta em
+voz alta, e dá para responder clicando ou falando. Se a pessoa continuar, o
+modo fica ligado em todas as telas (e nas próximas visitas) até ser
+desativado. Se desativar, a voz não liga sozinha de novo naquela sessão;
+Alt + M oferece o modo outra vez.
+
+No modo de acessibilidade a Miranda conversa por voz, em tempo real, pela
+Gemini Live API (bate-papo por áudio do nível gratuito da API, modelos
+gemini-3.8-live e, se ele não responder, gemini-3.1-flash-live-preview).
+A pessoa fala quando quiser e ouve a resposta. A Miranda lê a tela aberta,
+navega, pesquisa oportunidades, profissionais e empresas, preenche
+formulários, clica em botões, lê notificações e resume a conta. Pensado
+para quem tem deficiência visual: dá para usar o sistema inteiro só pela
+voz, sem precisar enxergar a tela.
+
+Regras do modo:
+- Antes de publicar, enviar, salvar, excluir, manifestar interesse ou criar
+  conta, a Miranda diz o que vai acontecer e pede confirmação.
+- Anexar arquivo exige a própria pessoa: a Miranda leva o foco até o campo
+  e pede para apertar Enter e escolher o arquivo.
+- Alt + M silencia ou liga o microfone; com a Miranda falando, interrompe a
+  fala. Funciona em todas as telas. O botão "Silenciar microfone", na barra
+  de voz embaixo, faz o mesmo. Fora do modo, Alt + M abre a caixinha para
+  ativá-lo.
+- A barra de voz, embaixo da tela, mostra o estado (ouvindo, falando,
+  microfone silenciado), a legenda da fala, a transcrição da conversa (onde
+  também dá para escrever para ela) e o botão Desativar modo.
+- O navegador pede permissão para usar o microfone. Sem microfone, a
+  conversa segue por escrito, na transcrição.
+- A barrinha verde da barra de voz mostra o nível do microfone. Se ela não
+  se mexe quando a pessoa fala, o som não está chegando: a Miranda testa os
+  outros microfones do computador sozinha, e dá para escolher o microfone
+  em Transcrição > Microfone.
+- Depois de um F5 (recarregar a página), a Miranda reconecta sozinha; o
+  navegador só deixa tocar som depois de uma tecla ou clique, então a
+  primeira tecla em qualquer lugar libera a voz e ela avisa que continua
+  ouvindo. Pelo F5 do VS Code, com a configuração que vem no projeto
+  (.vscode/launch.json), a voz sai sem precisar de nenhuma tecla.
+- Se a voz ao vivo não funcionar no computador (antivírus, extensão, rede
+  que bloqueia a conexão contínua, ou cota esgotada), a Miranda passa sozinha
+  para o modo compatível: ouve a fala, manda pelo mesmo caminho da conversa
+  por texto e responde com a voz do próprio computador, logo depois que a
+  pessoa para de falar.
+- Se a voz não funcionar (sem chave, chave recusada ou sem internet), a
+  Miranda avisa com gentileza, pela voz do próprio navegador, que o
+  assistente de voz não está funcionando no momento. O ProLink continua
+  funcionando pelo teclado e pelo leitor de tela.
+
+Por dentro: a página acessivel.html mostra a tela do ProLink num quadro e
+mantém, fora dele, a conversa de áudio aberta; por isso a voz não cai ao
+trocar de tela. As ações na tela são feitas pelo arquivo
+app/views/voz-agente.js; a conversa, por app/views/voz-moldura.js.
+
 CONVERSA (usa IA)
 O atalho "Falar com a Miranda", no topo do menu lateral, abre a tela de
 bate-papo. Ali ela conversa em texto, mantém o fio da conversa e serve
@@ -347,8 +402,10 @@ telas enquanto o site estiver aberto e some quando a aba é fechada. Sem
 chave, a Miranda avisa com gentileza que a conversa está indisponível no
 momento; o tour guiado continua funcionando.
 
-Limites: a Miranda não acessa o cadastro, os documentos nem as
-mensagens de ninguém. Ela não consulta a base do Crea em tempo real e
+Limites: na conversa por texto, a Miranda não acessa o cadastro, os
+documentos nem as mensagens de ninguém. No modo de acessibilidade ela lê
+o que está na tela aberta e a conta de quem está usando, só para agir a
+pedido da própria pessoa. Ela não consulta a base do Crea em tempo real e
 não emite, registra nem dá baixa em ART. Ela orienta; quem executa é o
 profissional, no sistema do Crea da região dele.
 
@@ -407,14 +464,9 @@ no atendimento do Crea da região do profissional.
 6. PERGUNTAS FREQUENTES SOBRE O PROLINK
 ------------------------------------------------------------------------
 Como conheço o sistema sem criar conta? Na tela de entrar, clique em
-"Usar modo de demonstração". Aparece um aviso: os profissionais, empresas,
-registros, documentos e dados mostrados são fictícios, não têm contas
-criadas e servem só para demonstrar o ProLink. Depois de ler, a pessoa
-escolhe o perfil — profissional (PF), empresa (PJ) ou administrativo —,
-informa o nome (ou o nome da empresa, no perfil PJ), entra nas telas
-daquele perfil com esse nome e vê o tutorial da Miranda como num
-primeiro acesso. Uma faixa no topo lembra
-que é demonstração e tem o botão "Sair da demonstração".
+"Entrar como visitante". Dá para navegar e ver oportunidades e perfis;
+publicar demanda, enviar proposta e conversar exigem uma conta. O modo de
+demonstração não existe mais.
 
 Como entro com a minha conta? Informe o documento usado no cadastro
 (CPF ou CNPJ) ou o e-mail, e a senha, e clique em Entrar. O sistema confere o formato dos campos,
@@ -469,6 +521,11 @@ Como desligo os tours que aparecem sozinhos? No último passo, marque
 "Não mostrar esses tours". O botão do canto continua funcionando,
 e desmarcar a opção religa a abertura automática.
 
+Como vejo a senha que estou digitando? Todo campo de senha tem um olhinho
+no canto direito: clique (ou aperte Enter nele) para mostrar a senha e de
+novo para esconder. Vale em entrar, criar conta, recuperar acesso, trocar a
+senha nas configurações e na caixinha da chave do Gemini.
+
 Dá para usar no celular? O layout responde a telas menores, mas foi
 desenhado para desktop.
 
@@ -489,6 +546,7 @@ prolink/
   avaliacoes.html     reputação e notas
   perfil.html         perfil profissional
   miranda.html        assistente virtual
+  acessivel.html      modo de acessibilidade: telas + Miranda por voz
   manual-prolink.txt  este manual
   assets/css/prolink.css
   assets/img/             rosto e figura da Miranda
